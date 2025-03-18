@@ -1,0 +1,335 @@
+import React, { useEffect, useState, useRef } from "react";
+import { Heart, MessageCircle, MoreVertical, Share, Verified } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
+import { formatDistanceToNow } from "date-fns";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+
+import { BasicInfo, postDelete, sendingLikes, UnLikes } from "@/controllers/controller";
+import videojs from "video.js";
+import "video.js/dist/video-js.css";
+import CommentModal from "./CommentModal";
+import { ref, push } from "firebase/database";
+import { realDatabase } from "@/lib/firebase";
+import { appBaseUrl } from "@/schema/appurl";
+import Link from "next/link";
+
+const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:any,setdelrender:React.Dispatch<React.SetStateAction<boolean>> }) => {
+  const [contentData, setContentData] = useState<any[]>([]);
+  const [sendData, setsendData] = useState<any>({})
+   const [likesState, setLikesState] = useState<{ [key: string]: boolean }>({});
+  const [commentCounts, setCommentCounts] = useState<{ [key: string]: number }>({});
+      const [userId, setuserId] = useState<string>("")
+      const [comments, setComments] = useState<number>();
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [newrender, setnewrender] = useState<boolean>(false)
+
+  const [loader, setloader] = useState<boolean>(false)
+      const [selectedContentId, setSelectedContentId] = useState<string | null>(null);
+  const [adminId, setadminId] = useState<string>("")
+  const [infoUser, setinfoUser] = useState<any[]>([])
+  const [pendingLikes, setPendingLikes] = useState<{ [key: string]: boolean }>({});
+    const [basicInfo, setbasicInfo] = useState({ name: "", ProfilePic: "", username: "", })
+    const videoRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+    
+  useEffect(() => {
+    const userDataInfo = async() => {
+    
+      if (userid) {
+               const UserInfo = await BasicInfo(userid)
+               if (UserInfo.success == true) {
+                 
+                 setinfoUser(UserInfo.data)
+               }
+             }
+    }
+    userDataInfo()
+       setContentData(data)
+    setuserId(userid)
+    
+    const initialLikes: { [key: string]: boolean } = {};
+        data.forEach((item: any) => {
+          initialLikes[item._id] = item.likes.includes(userid);
+        });
+        setLikesState(initialLikes);
+   }, [userid,data])
+  
+  useEffect(() => {
+      contentData?.forEach((item, idx) => {
+        if (item.video && videoRefs.current[idx]) {
+          videojs(videoRefs.current[idx] as HTMLDivElement, {
+            controls: true,
+            responsive: true,
+            fluid: true,
+          });
+        }
+      });
+  }, [contentData]);
+  
+  const updateCommentCount = (contentId: string, newCount: number) => {
+    setCommentCounts((prevCounts) => ({
+      ...prevCounts,
+      [contentId]: newCount, // Correctly update the count for the specific post
+    }));
+  };
+
+   const handleLike = (postId: string,text:string,adminid:string) => {
+      // Optimistic UI: Toggle like state instantly
+      setLikesState((prev) => ({
+        ...prev,
+        [postId]: !prev[postId],
+      }));
+  
+      // Store pending like request
+      setPendingLikes((prev) => ({
+        ...prev,
+        [postId]: !prev[postId],
+      }));
+  
+      // Debounced API request
+      setTimeout(async () => {
+        try {
+      
+          await sendingLikes(userId, postId);
+        } catch (error) {
+          console.error("Error liking post:", error);
+          // Revert UI if API fails
+          setLikesState((prev) => ({
+            ...prev,
+            [postId]: !prev[postId],
+          }));
+        }
+        if (adminId !== userId) {
+          
+          const notificationRef = ref(realDatabase, `notifications/${adminid}`);
+          push(notificationRef, {
+            type: "like",
+            postId,
+            userId,  // The user who commented
+            text: text,
+            timestamp: Date.now(),
+          });
+          await fetch(`${appBaseUrl}/api/notifications`, {
+            method: "POST",
+            body: JSON.stringify({
+              adminId:adminid,   // Post owner's ID
+              userId:userId,    // Commenter ID
+              contentId:postId,
+              type: "like",
+              text: text,
+              timestamp: new Date(),
+            }),
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      }, 500);
+  };
+  
+  const handleUnlike = async (postId: string, text: string, adminid: string) => {
+    setLikesState((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+    try {
+      
+      await UnLikes(userId, postId);
+    } catch (error) {
+      console.error("Error liking post:", error);
+      // Revert UI if API fails
+      setLikesState((prev) => ({
+        ...prev,
+        [postId]: !prev[postId],
+      }));
+    }
+  }
+
+  const deletepost = async (postId: string) => {
+    try {
+      setdelrender(false)
+      setnewrender(false)
+      setloader(true)
+      const postdeleting = await postDelete(postId, userId)
+      if (postdeleting.success == true) {
+        setdelrender(true)   
+        setnewrender(true)
+      }
+    } catch (error) {
+      
+    } finally {
+      setloader(false)
+    }
+    
+  }
+   console.log("content data ::",contentData)
+  return (
+    <>
+    {isCommentModalOpen && selectedContentId && (
+        <CommentModal
+          
+          onClose={() => setIsCommentModalOpen(false)}
+          contentData={ sendData}
+        contentId={selectedContentId} // Pass content ID to the modal
+        comment={comments}
+        userId={userId}
+        adminId={adminId}
+          basicInfo={basicInfo}
+          updateCommentCount={updateCommentCount}
+      />
+    )}
+<div className='text-2xl font-semibold pb-3 text-gray-600'>All post</div>
+      {contentData?.map((items: any, idx: number) => (
+      <Link key={idx} href={`/post/${items._id}`} className="hover:bg-slate-100 ">
+          
+      <div  className="bg-white dark:bg-gray-800 rounded-lg sm:w-[650px]  mx-auto sm:p-4 p-0 pt-2">
+        <div className="flex items-start space-x-1 sm:space-x-3">
+          <Avatar>
+            <AvatarImage src={items.adminId?.profilePic} alt="User Avatar" />
+            <AvatarFallback>AB</AvatarFallback>
+          </Avatar>
+          <div className="sm:flex-1 flex flex-col min-w-0">
+                <div className="flex justify-between" >
+                  <div className="flex items-center space-x-1">
+
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                {items.adminId?.name}
+              </h2>
+            
+              
+              {items?.adminId?.isVerified && <Verified className="text-white fill-blue-500" />}
+              <span className="text-sm text-gray-500 dark:text-gray-400">{items.adminId?.username}</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">·</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}</span>
+                  </div>
+                  <div>
+                  <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+      <MoreVertical className="w-3 h-3 text-gray-400"/>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+                        {items.adminId._id !== userId && <DropdownMenuItem onClick={(e) => {e.preventDefault(),e.stopPropagation()}}>Report</DropdownMenuItem>}
+                        {items.adminId._id === userId && <DropdownMenuItem onClick={(e) => { e.preventDefault(), e.stopPropagation(), deletepost(items._id) }} className="text-red-500">{loader ? "Deleting..." : "Delete"}</DropdownMenuItem>}
+      </DropdownMenuContent>
+    </DropdownMenu>
+                   
+                  </div>
+            </div>
+            <p className="mt-1 text-gray-900 text-sm dark:text-white">
+  {items.text.split(" ").map((word:any, index:number) =>
+    word.startsWith("#") ? (
+      <span key={index} className="text-blue-500">
+        {word}{" "}
+      </span>
+    ) : (
+      <span key={index}>{word} </span>
+    )
+  )}
+</p>
+
+            {/* Media Section */}
+            <div className="mt-2 sm:w-full w-[347px]  overflow-hidden rounded-lg">
+              {items.image && (
+                <Image
+                  src={items.image}
+                  width={650}
+                  height={400}
+                  className="w-full rounded-lg"
+                  alt="Tweet Media"
+                  quality={100}
+                  priority
+                />
+              )}
+
+              {items.video && (
+                <div  onClick={(e) => { e.stopPropagation(), e.preventDefault() }}  className="w-full  rounded-lg overflow-hidden">
+                  <video
+                    ref={(el:any) => (videoRefs.current[idx] = el)}
+                    className="video-js vjs-theme-default w-full rounded-lg"
+                        data-setup="{}"
+                          preload="metadata"
+                        autoPlay
+                        muted
+                        playsInline
+                        onClick={(e) => { e.stopPropagation(), e.preventDefault() }}
+                  >
+                    <source src={items.video} type="video/mp4" />
+                  </video>
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-3 flex items-center justify-between max-w-md">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent link click
+                      e.preventDefault(); // Prevent navigation
+                  setSelectedContentId(items._id); // Set content ID
+                  setadminId(items.adminId._id)
+                  setComments(items.comments.length);
+                  setsendData(items)
+                  setIsCommentModalOpen(true);
+                  setbasicInfo({name:infoUser[0].name,ProfilePic:infoUser[0].profilePic,username:infoUser[0].username})
+                }}
+              >
+                <MessageCircle className="h-5 w-5 mr-2" />
+                {commentCounts[items._id] ?? items.comments?.length ?? 0}
+              </Button>
+
+             { items.likes.some((some:any)=>some.userId==userId)? (<Button
+                variant="ghost"
+                size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent link click
+                      e.preventDefault(); // Prevent navigation
+                  // setSelectedContentId(items._id);
+                  // setAdminId(items.adminId._id);
+                  handleUnlike(items._id,items.text,items.adminId._id)
+                }}
+                className={`${
+                  likesState[items._id]?"text-gray-500 dark:text-gray-400" 
+                    : "fill-[#f14444e3] text-red-500 dark:text-red-400"
+                     
+                }  dark:hover:text-red-400 hover:text-red-500`}
+              >
+                <Heart className="h-5 w-5 mr-2" />
+                <span className="text-xs">{items.likes.length - (likesState[items._id] ? 1 : 0)}</span>
+              </Button>) :
+                (<Button
+                variant="ghost"
+                size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent link click
+                        e.preventDefault(); // Prevent navigation
+                  
+                  handleLike(items._id,items.text,items.adminId._id)
+                }}
+                className={`${
+                  likesState[items._id] || items.likes.some((some:any)=>some.userId==userId)
+                    ? "fill-red-500 text-red-500 dark:text-red-400"
+                    : "text-gray-500 dark:text-gray-400"
+                }  dark:hover:text-red-400 hover:text-red-500`}
+              >
+                <Heart className="h-5 w-5 mr-2" />
+                <span className="text-xs">{items.likes.length + (likesState[items._id] ? 1 : 0)}</span>
+              </Button>)}
+
+              <Button variant="ghost" size="sm" className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400">
+                <Share className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+        <hr className="mt-4" />
+      </div>
+        </Link>
+      
+    ))}
+  </>
+  )
+}
+
+export default AnotherProfileTweets
