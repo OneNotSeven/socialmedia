@@ -184,7 +184,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
       <div  className="bg-white dark:bg-gray-800 rounded-lg sm:w-[650px]  mx-auto sm:p-4 p-0 pt-2">
         <div className="flex items-start space-x-1 sm:space-x-3">
           <Avatar>
-            <AvatarImage src={items.adminId?.profilePic} alt="User Avatar" />
+            <AvatarImage className="object-cover" src={items.adminId?.profilePic} alt="User Avatar" />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
           <div className="sm:flex-1 flex flex-col min-w-0">
