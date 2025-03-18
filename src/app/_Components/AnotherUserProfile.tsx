@@ -95,7 +95,7 @@ const AnotherUserProfile = ({ username }: any) => {
           <div className="flex items-center justify-between sm:gap-8 gap-2">
             <div className="relative">
               <div className="relative sm:h-44 sm:w-44 w-24 h-24  overflow-hidden rounded-full">
-                <Image
+                <img
                   src={profile?.profilePic || "/profile.jpg"}
                   alt="Profile picture"
                   fill
