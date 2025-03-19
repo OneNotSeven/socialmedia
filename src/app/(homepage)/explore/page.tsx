@@ -458,7 +458,7 @@ export default function ExplorePage() {
                         #Viral
                       </p>
                       <div className="rounded-lg overflow-hidden mb-3">
-                        <Image
+                        <img
                           src={items.url}
                           alt="Post image"
                           width={400}
