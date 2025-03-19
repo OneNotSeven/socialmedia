@@ -174,7 +174,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
       )}
   
       {loading? Array.from({ length: 3 }).map((_, i) => <TweetsSkeleton key={i} />):
-        <div className="pb-12 w-full">
+        <div className="pb-12 w-full flex flex-col gap-3">
         
         {contentData?.map((items: any, idx: number) => (
 
@@ -316,7 +316,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
               </div>
               <div className="flex items-center">
                 <Share className="h-5 w-5 mr-1 "/>
-                <span>Share</span>
+                
               </div>
             </div>
           </CardContent>
