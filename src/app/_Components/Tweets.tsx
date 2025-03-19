@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Heart, MessageCircle, Share, VerifiedIcon } from "lucide-react";
+import { Heart, MessageCircle, Share, VerifiedIcon,Verified } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { BasicInfo, gettingContent, getToken, sendingLikes, UnLikes } from "@/controllers/controller";
