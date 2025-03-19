@@ -174,7 +174,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
       )}
   
       {loading? Array.from({ length: 3 }).map((_, i) => <TweetsSkeleton key={i} />):
-        <div className="pb-12">
+        <div className="pb-12 w-full">
         
         {contentData?.map((items: any, idx: number) => (
 
@@ -219,12 +219,14 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
    )}
  </p>
             
-            <div className="rounded-lg overflow-hidden mb-3">
+            <div className="rounded-lg max-h-96 overflow-hidden mb-3">
                 {items.image && (<Image
                   src={items.image}
                   alt="Post image"
                   width={400}
                   height={200}
+                  quality={100}
+                      priority
                   className="w-full object-cover"
                 />)}
                  {items.video && (
