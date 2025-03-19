@@ -176,40 +176,32 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
         <>
         
         {contentData?.map((items: any, idx: number) => (
-         <Link key={items._id} href={`post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-fit w-full sm:mt-0 mt-3">
-         
-         <div  className="  dark:bg-gray-800 rounded-lg w-full sm:w-[640px] overflow-auto sm:p-4 p-0">
-            {/* Suggested Post Label */}
-            {items.isSuggested && (
+        <Link key={items._id} href={`post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-full w-full sm:mt-2 mt-3">
+ {items.isSuggested && (
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 bg-slate-200 px-2 py-1 w-fit rounded-full">
                 Suggested Post
               </p>
             )}
-  
-            <div className="flex items-start space-x-1 sm:space-x-3">
-              <Avatar className="w-5 h-5">
-                <AvatarImage className=" object-cover" src={items.adminId?.profilePic || "/profile.jpg"} alt="User Avatar" />
-                <AvatarFallback>AB</AvatarFallback>
+          <Card key={idx} className="hover:shadow-md w-full transition-shadow">
+          <CardContent className="p-4">
+            <div className="flex items-center mb-3">
+              <Avatar className="h-8 w-8 mr-2">
+                <AvatarImage src={items.adminId?.profilePic || "/profile.jpg"} />
+                <AvatarFallback>U</AvatarFallback>
               </Avatar>
-  
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-1">
-                  <h2 className="text-sm font-semibold flex gap-1 items-center text-gray-900 dark:text-white truncate">
-                    {items.adminId?.name}
-                    {items.adminId?.isVerified && (
-                      <VerifiedIcon className="w-5 h-5 text-white fill-blue-500" />
-                    )}
-                  </h2>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {items.adminId?.username}
-                  </span>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">·</span>
-                  <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">
-                    {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
-                  </span>
+              <div>
+                <div className="font-semibold text-sm flex items-center">
+                                            { items.adminId.name}
+                      <Verified className="fill-blue-500 text-white" />
+                      <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">
+                   {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
+                 </span>
                 </div>
-  
-                <p className="mt-1 text-gray-900 text-sm dark:text-white">
+                                        <div className="text-xs text-muted-foreground">{items.adminId.username }</div>
+              </div>
+            </div>
+           
+            <p className="text-sm mb-3">
   {items.text.split(" ").map((word:any, index:number) =>
     word.startsWith("#") ? (
       <span key={index} className="text-blue-500">
@@ -218,24 +210,18 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
     ) : (
       <span key={index}>{word} </span>
     )
-  )}
-</p>
-  
-                {/* Media Section */}
-                <div className="mt-2 sm:w-full w-[347px]  overflow-hidden rounded-lg">
-                  {items.image && (
-                    <Image
-                      src={items.image}
-                      width={650}
-                      height={400}
-                      className="w-full rounded-lg"
-                      alt="Tweet Media"
-                      quality={100}
-                      priority
-                    />
-                  )}
-  
-                  {items.video && (
+   )}
+ </p>
+            
+            <div className="rounded-lg overflow-hidden mb-3">
+                {items.image && (<Image
+                  src={items.image}
+                  alt="Post image"
+                  width={400}
+                  height={200}
+                  className="w-full object-cover"
+                />)}
+                 {items.video && (
                     <div  onClick={(e) => { e.stopPropagation(), e.preventDefault() }} className="w-full rounded-lg overflow-hidden">
                       <video
                         ref={(el: any) => {
@@ -253,12 +239,10 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                       </video>
                     </div>
                   )}
-                </div>
-  
-                {/* Action Buttons */}
-                <div className="mt-3 flex items-center justify-between max-w-md">
-                  {/* Comment Button */}
-                  <Button
+            </div>
+            <div className="flex items-center justify-between text-muted-foreground text-xs">
+              <div className="flex items-center">
+                                <Button
                     variant="ghost"
                     size="sm"
                     className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
@@ -280,11 +264,10 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                     <MessageCircle className="h-5 w-5 mr-2" />
                     {commentCounts[items._id] ?? items.comments?.length ?? 0}
                   </Button>
-  
-                  {/* Like Button */}
-                 
-
-                    { items.likes.some((some:any)=>some.userId==userId)? (<Button
+              </div>
+              
+              <div className="flex items-center">
+              { items.likes.some((some:any)=>some.userId==userId)? (<Button
                                     variant="ghost"
                                     size="sm"
                       onClick={(e) => {
@@ -295,7 +278,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                                       handleUnlike(items._id)
                                     }}
                                     className={`${
-                                      likesState[items._id]?"text-gray-500 dark:text-gray-400" 
+                                      likesState[items._id]?"text-gray-500 dark:text-gray-400"
                                         : " text-red-500 dark:text-red-400"
                                          
                                     }  dark:hover:text-red-400 hover:text-red-500`}
@@ -318,25 +301,19 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                                         : "text-gray-500 dark:text-gray-400"
                                     }  dark:hover:text-red-400 hover:text-red-500`}
                                   >
-                                    <Heart className="h-5 w-5 mr-2" />
+                                    <Heart className="h-5 w-5" />
                                     <span className="text-xs">{items.likes.length + (likesState[items._id] ? 1 : 0)}</span>
                                   </Button>)}
-                    
-  
-                  {/* Share Button */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
-                  >
-                    <Share className="h-5 w-5" />
-                  </Button>
-                </div>
+                {/* <span>32K</span> */}
+              </div>
+              <div className="flex items-center">
+                <Share className="h-5 w-5 mr-1 "/>
+                <span>Share</span>
               </div>
             </div>
-          </div>
-            <hr />
-         </Link> 
+          </CardContent>
+        </Card>
+          </Link>
         ))}
         </> 
 }
