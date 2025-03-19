@@ -6,6 +6,7 @@ import WhatsHappening from '../_Components/WhatsHappening'
 import { getToken } from '@/controllers/controller'
 import FollowSuggestion from '../_Components/FollowSuggestion'
 import Tweets from '../_Components/Tweets'
+import Header from '../_Components/Header'
 
 const Page = () => {
   
@@ -36,6 +37,7 @@ const Page = () => {
       <div  className='flex flex-col max-w-[650px] w-[650px] border border-gray-200 p-4 border-l items-center'>
 
         {/* <Story /> */}
+        <Header/>
         <Uploadcontent user={ userId}/>
         <Tweets/>
       </div>
