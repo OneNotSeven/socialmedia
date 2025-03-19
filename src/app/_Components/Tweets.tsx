@@ -174,14 +174,15 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
       )}
   
       {loading? Array.from({ length: 3 }).map((_, i) => <TweetsSkeleton key={i} />):
-        <>
+        <div className="pb-12">
         
         {contentData?.map((items: any, idx: number) => (
 
         <Link key={items._id} href={`post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-full w-full sm:mt-2 mt-3">
 
 
-          <Link key={items._id} href={`post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-full w-full sm:mt-2 mt-3">
+          
+
  {items.isSuggested && (
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 bg-slate-200 px-2 py-1 w-fit rounded-full">
                 Suggested Post
@@ -320,10 +321,10 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
         </Card>
           </Link>
         ))}
-        </> 
+        </div> 
 }
     </>
-  );
+)
 };
 
 export default Tweets;
