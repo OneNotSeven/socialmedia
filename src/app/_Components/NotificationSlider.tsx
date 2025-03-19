@@ -61,7 +61,7 @@ const NotificationSlider = ({ onClose, userId }: NotificationSliderProps) => {
         </div>
 
         {/* Notification List */}
-        <div className="overflow-y-auto h-screen p-4">
+        <div className="overflow-y-auto h-screen pb-12 p-4">
           {loading ? (
             <div className="text-gray-500 w-full flex text-center gap-2 mt-10">
               <div className="w-10 h-10">

@@ -1,4 +1,5 @@
 "use client"
+import { Button } from "@/components/ui/button";
 import { updateProfile } from "@/controllers/controller";
 import { handleUpload } from "@/helpers/firebaseUpload";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
@@ -53,11 +54,12 @@ console.log("avatar state",imageSrc)
               </div>
 
               <div className="flex flex-col justify-center space-y-5 sm:ml-8">
-                  <button type="button"
+                
+                  <Button type="button"
                       onClick={() => fileInputRef.current?.click()}
                       className="py-3.5 px-7 text-base font-medium text-indigo-100 focus:outline-none bg-[#202142] rounded-lg border border-indigo-200 hover:bg-indigo-900 focus:z-10 focus:ring-4 focus:ring-indigo-200 ">
                       Change picture
-                  </button>
+                  </Button>
                   <input type='file' className='inputimage hidden'
                       ref={fileInputRef}
           

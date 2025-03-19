@@ -214,7 +214,7 @@ const AnotherUserProfile = ({ username }: any) => {
           </div>
         </div>
         <hr className='sm:mt-8 mt-4' />
-        <div className='pt-5 pb-3'>
+        <div className='pt-5 pb-14'>
           
           <AnotherProfileTweets data={profile.posts} userid={userId} setdelrender={setdelrender} />
         </div>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, Home, Search, User, Users, Verified, HelpCircle, SearchIcon } from "lucide-react";
+import { Bell, Home, Search, User, Users, Verified, HelpCircle, SearchIcon, HomeIcon } from "lucide-react";
 import { ref, onValue, update } from "firebase/database";
 import { realDatabase } from "@/lib/firebase";
 import { BasicInfo, getToken } from "@/controllers/controller";
@@ -186,22 +186,28 @@ const Sidebar = ({ check }: any) => {
         <NotificationSlider onClose={() => { setIsSliderOpen(false); setCollapsed(false); }} userId={userId} />
       )}
 
-      <div className={`w-full sm:hidden   fixed bottom-0 bg-slate-100 z-50 ${pathname==`/view-community/${params.id}` ? 'hidden' : 'flex'}`}>
+      <div className={`w-full sm:hidden h-16 flex items-center justify-center  fixed bottom-0 bg-white shadow-md z-50 ${pathname==`/view-community/${params.id}` ? 'hidden' : 'flex'}`}>
         <div className="flex w-full">
           <div className="flex justify-evenly w-full items-center h-12 rounded-t-md gap-2">
-            <div><Home /></div>
-            <div><Users/></div>
+            <a href="/">
+
+            <div ><HomeIcon className={`text-gray-700 ${pathname=="/"?'text-gray-900':null}`}/></div>
+            </a>
+            <a href="/build-community">
+
+            <div > <Users className={`text-gray-700 ${pathname=="/build-community"?'text-gray-900':null}`} /></div>
+            </a>
             <a href="/explore">
-            <div><SearchIcon /></div>
+            <div ><SearchIcon className={`text-gray-700 ${pathname=="/explore"?'text-gray-900':null}`}/></div>
             </a>
             <div className="relative" onClick={handler}>
             {hasNewLike && (
                     <span className="absolute top-0 left-5 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                   )}
-            <div><Bell/></div>
+            <div ><Bell className={`text-gray-700 ${isSliderOpen}?'text-gray-900':null}`}/></div>
             </div>
             <a href={`/profiles/${infoUser[0]?.username}`}>
-            <div ><User /></div>
+            <div ><User className={`${pathname === `/profiles/${params.id}` }?'fill-black':null}`} /></div>
             </a>
 </div>
         </div>

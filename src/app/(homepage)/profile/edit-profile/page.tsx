@@ -38,10 +38,10 @@ const Page = () => {
       {populateInfo && <div className='flex flex-col w-full'>
      
 
-        <div className="bg-white w-full flex flex-col gap-5 px-3 md:px-6 lg:px-6 md:flex-row text-[#161931]">
+        <div className="bg-white w-full flex flex-col gap-5 pb-5  px-1 sm:px-6 lg:px-6 md:flex-row text-[#161931]">
           <main className="w-full min-h-screen py-1">
             <div className="p-2 md:p-4">
-              <div className="w-full px-6 pb-8 mt-8 sm:rounded-lg">
+              <div className="w-full sm:px-6 pb-8 mt-8 sm:rounded-lg">
                 <h2 className="pl-6 text-2xl font-bold sm:text-xl">Public Profile</h2>
                 <div className='flex flex-col sm:flex-row gap-6'>
                   <div className="gap-6 sm:w-[60%] mt-8">
@@ -53,7 +53,7 @@ const Page = () => {
                       setskills(false)
                       // setproject(false)
                       setsocial(false)
-                    }} className="py-2 sm:px-5 items-center sm:w-[250px] flex gap-2 text-base  text-gray-600 ">
+                    }} className="py-2 sm:px-5 items-center sm:w-[250px] flex gap-1 text-base  text-gray-600 ">
                       <User size={18} />
                       <span>Personal Info</span>
                     </div>
@@ -63,7 +63,7 @@ const Page = () => {
                       setskills(true)
                       // setproject(false)
                       setsocial(false)
-                    }} className="py-2 sm:px-5 items-center sm:w-[250px] flex gap-3 mt-1 text-base text-gray-600 ">
+                    }} className="py-2 sm:px-5 items-center sm:w-[250px] flex gap-1 mt-1 text-base text-gray-600 ">
                       <Settings size={18} />
                       <span>Skills</span>
                     </div>
@@ -83,7 +83,7 @@ const Page = () => {
                       setskills(false)
                       // setproject(false)
                       setsocial(true)
-                    }} className="py-2 sm:px-5 items-center sm:w-[250px] flex gap-3 mt-1 text-base  text-gray-600 ">
+                    }} className="py-2 sm:px-5 items-center sm:w-[250px] flex gap-1 mt-1 text-base  text-gray-600 ">
                       <Link size={18} />
                       <span>Social links</span>
                     </div>
