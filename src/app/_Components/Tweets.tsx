@@ -219,7 +219,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
    )}
  </p>
             
-            <div className="rounded-lg max-h-96 overflow-hidden mb-3">
+            <div className="rounded-lg  overflow-hidden mb-3">
                 {items.image && (<Image
                   src={items.image}
                   alt="Post image"
