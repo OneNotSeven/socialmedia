@@ -89,16 +89,18 @@ const AnotherUserProfile = ({ username }: any) => {
   return (
       <>
           
-      {profile ? < div className="max-w-2xl sm:w-fit w-full mx-auto p-4" >
-        <div className="space-y-8">
+      {profile ? < div className="max-w-2xl sm:w-fit w-full mx-auto p-2" >
+        <div className="space-y-8 w-full">
           {/* Profile Header */}
           <div className="flex items-center justify-between sm:gap-8 gap-2">
             <div className="relative">
               <div className="relative sm:h-44 sm:w-44 w-24 h-24  overflow-hidden rounded-full">
-                <img
+                <Image
                   src={profile?.profilePic || "/profile.jpg"}
                   alt="Profile picture"
-                  fill
+                  
+                  width={200}
+                  height={200}
                   className="object-cover"
                   priority
                 />
@@ -214,7 +216,7 @@ const AnotherUserProfile = ({ username }: any) => {
           </div>
         </div>
         <hr className='sm:mt-8 mt-4' />
-        <div className='pt-5 pb-14'>
+        <div className='pt-5 pb-20'>
           
           <AnotherProfileTweets data={profile.posts} userid={userId} setdelrender={setdelrender} />
         </div>
@@ -346,7 +348,7 @@ const FollowersModal = ({ title, list}: { title: string; list: any[]; userid:any
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="font-semibold flex gap-1" onClick={() => setOpen(true)}>
+        <Button variant="ghost" className="font-semibold sm:px-4 px-1 flex gap-1" onClick={() => setOpen(true)}>
           <span>{list?.length}</span>
           <span>{title}</span>
         </Button>
