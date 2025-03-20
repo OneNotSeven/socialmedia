@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Heart, MessageCircle, MoreVertical, Share, Verified } from "lucide-react";
+import { Heart, HeartIcon, MessageCircle, MoreVertical, Share, Verified } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Card, CardContent } from "@/components/ui/card"
 
 import { BasicInfo, postDelete, sendingLikes, UnLikes } from "@/controllers/controller";
 import videojs from "video.js";
@@ -177,157 +178,170 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
           updateCommentCount={updateCommentCount}
       />
     )}
-<div className='text-2xl font-semibold pb-3 text-gray-600'>All post</div>
-      {contentData?.map((items: any, idx: number) => (
-      <Link key={idx} href={`/post/${items._id}`} className="hover:bg-slate-100 ">
-          
-      <div  className="bg-white dark:bg-gray-800 rounded-lg sm:w-[650px]  mx-auto sm:p-4 p-0 pt-2">
-        <div className="flex items-start space-x-1 sm:space-x-3">
-          <Avatar>
-            <AvatarImage className="object-cover" src={items.adminId?.profilePic} alt="User Avatar" />
-            <AvatarFallback>AB</AvatarFallback>
-          </Avatar>
-          <div className="sm:flex-1 flex flex-col min-w-0">
-                <div className="flex justify-between" >
-                  <div className="flex items-center space-x-1">
+      <div className='text-2xl font-semibold pb-3  text-gray-600'>All post</div>
+      <div className="flex flex-col gap-2 w-full">
 
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                {items.adminId?.name}
-              </h2>
-            
-              
-              {items?.adminId?.isVerified && <Verified className="text-white fill-blue-500" />}
-              <span className="text-sm sm:flex hidden  text-gray-500 dark:text-gray-400">{items.adminId?.username}</span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">·</span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">{formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}</span>
-                  </div>
+      {contentData?.map((items: any, idx: number) => (
+       
+        <Link key={items._id} href={`/post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-full w-full sm:mt-2 mt-3">
+
+
+          
+
+        {items.isSuggested && (
+                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 bg-slate-200 px-2 py-1 w-fit rounded-full">
+                       Suggested Post
+                     </p>
+                   )}
+                 <Card key={idx} className="hover:shadow-md w-full transition-shadow">
+                 <CardContent className="p-4">
+                   <div className="flex items-center mb-3">
+                     <Avatar className="h-8 w-8 mr-2">
+                       <AvatarImage className="object-cover w-full h-full" src={items.adminId?.profilePic || "/profile.jpg"} />
+                       <AvatarFallback>U</AvatarFallback>
+                     </Avatar>
+                     <div className="w-full">
+                  <div className="font-semibold text-sm flex items-center justify-between">
+                    <div className="flex gap-1">
+
+                                                   { items.adminId.name}
+                             <Verified className="fill-blue-500 w-5 h-5 text-white" />
+                             <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">
+                          {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
+                        </span>
+                    </div>
                   <div>
-                  <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-      <MoreVertical className="w-3 h-3 text-gray-400"/>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+                 <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <MoreVertical className="w-3 h-3 text-gray-400" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
                         {items.adminId._id !== userId && <DropdownMenuItem onClick={(e) => {e.preventDefault(),e.stopPropagation()}}>Report</DropdownMenuItem>}
                         {items.adminId._id === userId && <DropdownMenuItem onClick={(e) => { e.preventDefault(), e.stopPropagation(), deletepost(items._id) }} className="text-red-500">{loader ? "Deleting..." : "Delete"}</DropdownMenuItem>}
-      </DropdownMenuContent>
-    </DropdownMenu>
-                   
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
-            </div>
-            <p className="mt-1 text-gray-900 text-sm dark:text-white">
-  {items.text.split(" ").map((word:any, index:number) =>
-    word.startsWith("#") ? (
-      <span key={index} className="text-blue-500">
-        {word}{" "}
-      </span>
-    ) : (
-      <span key={index}>{word} </span>
-    )
-  )}
-</p>
-
-            {/* Media Section */}
-            <div className="mt-2 sm:w-full w-full  overflow-hidden rounded-lg">
-              {items.image && (
-                <Image
-                  src={items.image}
-                  width={650}
-                  height={400}
-                  className="w-full rounded-lg"
-                  alt="Tweet Media"
-                  quality={100}
-                  priority
-                />
-              )}
-
-              {items.video && (
-                <div  onClick={(e) => { e.stopPropagation(), e.preventDefault() }}  className="w-full  rounded-lg overflow-hidden">
-                  <video
-                    ref={(el:any) => (videoRefs.current[idx] = el)}
-                    className="video-js vjs-theme-default w-full rounded-lg"
-                        data-setup="{}"
-                          preload="metadata"
-                        autoPlay
-                        muted
-                        playsInline
-                        onClick={(e) => { e.stopPropagation(), e.preventDefault() }}
-                  >
-                    <source src={items.video} type="video/mp4" />
-                  </video>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="mt-3 flex items-center justify-between max-w-md">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent link click
-                      e.preventDefault(); // Prevent navigation
-                  setSelectedContentId(items._id); // Set content ID
-                  setadminId(items.adminId._id)
-                  setComments(items.comments.length);
-                  setsendData(items)
-                  setIsCommentModalOpen(true);
-                  setbasicInfo({name:infoUser[0].name,ProfilePic:infoUser[0].profilePic,username:infoUser[0].username})
-                }}
-              >
-                <MessageCircle className="h-5 w-5 mr-2" />
-                {commentCounts[items._id] ?? items.comments?.length ?? 0}
-              </Button>
-
-             { items.likes.some((some:any)=>some.userId==userId)? (<Button
-                variant="ghost"
-                size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent link click
-                      e.preventDefault(); // Prevent navigation
-                  // setSelectedContentId(items._id);
-                  // setAdminId(items.adminId._id);
-                  handleUnlike(items._id,items.text,items.adminId._id)
-                }}
-                className={`${
-                  likesState[items._id]?"text-gray-500 dark:text-gray-400" 
-                    : "fill-[#f14444e3] text-red-500 dark:text-red-400"
-                     
-                }  dark:hover:text-red-400 hover:text-red-500`}
-              >
-                <Heart className="h-5 w-5 mr-2" />
-                <span className="text-xs">{items.likes.length - (likesState[items._id] ? 1 : 0)}</span>
-              </Button>) :
-                (<Button
-                variant="ghost"
-                size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent link click
-                        e.preventDefault(); // Prevent navigation
+                  </div>
+                                               <div className="text-xs text-muted-foreground">{items.adminId.username }</div>
+                     </div>
+                   </div>
                   
-                  handleLike(items._id,items.text,items.adminId._id)
-                }}
-                className={`${
-                  likesState[items._id] || items.likes.some((some:any)=>some.userId==userId)
-                    ? "fill-red-500 text-red-500 dark:text-red-400"
-                    : "text-gray-500 dark:text-gray-400"
-                }  dark:hover:text-red-400 hover:text-red-500`}
-              >
-                <Heart className="h-5 w-5 mr-2" />
-                <span className="text-xs">{items.likes.length + (likesState[items._id] ? 1 : 0)}</span>
-              </Button>)}
-
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400">
-                <Share className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-        <hr className="mt-4" />
-      </div>
-        </Link>
+                   <p className="text-sm mb-3">
+         {items.text.split(" ").map((word:any, index:number) =>
+           word.startsWith("#") ? (
+             <span key={index} className="text-blue-500">
+               {word}{" "}
+             </span>
+           ) : (
+             <span key={index}>{word} </span>
+           )
+          )}
+        </p>
+                   
+                   <div className="rounded-lg overflow-hidden mb-3">
+                       {items.image && (<Image
+                         src={items.image}
+                         alt="Post image"
+                         width={400}
+                         height={200}
+                         className="w-full object-cover"
+                       />)}
+                        {items.video && (
+                           <div  onClick={(e) => { e.stopPropagation(), e.preventDefault() }} className="w-full rounded-lg overflow-hidden">
+                             <video
+                               ref={(el: any) => {
+                                 if (el) videoRefs.current[idx] = el;
+                               }}
+                               className="video-js vjs-theme-default w-full h-auto rounded-lg"
+                                 controls
+                                 preload="metadata"
+                                 autoPlay
+                                 muted
+                                 playsInline
+                                 onClick={(e) => { e.stopPropagation(), e.preventDefault() }}
+                             >
+                               <source src={items.video} type="video/mp4" />
+                             </video>
+                           </div>
+                         )}
+                   </div>
+                   <div className="flex items-center justify-between text-muted-foreground text-xs">
+                     <div className="flex items-center">
+                                       <Button
+                           variant="ghost"
+                           size="sm"
+                           className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
+                           onClick={(e) => {
+                                                  e.stopPropagation(); // Prevent link click
+                                                  e.preventDefault(); // Prevent navigation
+                                              setSelectedContentId(items._id); // Set content ID
+                                              setadminId(items.adminId._id)
+                                              setComments(items.comments.length);
+                                              setsendData(items)
+                                              setIsCommentModalOpen(true);
+                                              setbasicInfo({name:infoUser[0].name,ProfilePic:infoUser[0].profilePic,username:infoUser[0].username})
+                                            }}
+                         >
+                           <MessageCircle className="h-5 w-5 mr-2" />
+                           {commentCounts[items._id] ?? items.comments?.length ?? 0}
+                         </Button>
+                     </div>
+                     
+                     <div className="flex items-center">
+                     { items.likes.some((some:any)=>some.userId==userId)? (<Button
+                                           variant="ghost"
+                                           size="sm"
+                                           onClick={(e) => {
+                                                                    e.stopPropagation(); // Prevent link click
+                                                                    e.preventDefault(); // Prevent navigation
+                                                              
+                                                              handleLike(items._id,items.text,items.adminId._id)
+                                                            }}
+                                           className={`${
+                                             likesState[items._id]?"text-gray-500 dark:text-gray-400"
+                                               : " text-red-500 dark:text-red-400"
+                                                
+                                           }  dark:hover:text-red-400 hover:text-red-500`}
+                                         >
+                                           <Heart className="h-5 w-5 mr-2" />
+                                           <span className="text-xs">{items.likes.length - (likesState[items._id] ? 1 : 0)}</span>
+                                         </Button>) :
+                                           (<Button
+                                           variant="ghost"
+                                           size="sm"
+                               onClick={(e) => {
+                                 e.stopPropagation(); // Prevent link click
+                                 e.preventDefault(); // Prevent navigation
+                                             
+                                             handleLike(items._id,items.text,items.adminId._id)
+                                           }}
+                                           className={`${
+                                             likesState[items._id] || items.likes.some((some:any)=>some.userId==userId)
+                                               ? "fill-red-500 text-red-500 dark:text-red-400"
+                                               : "text-gray-500 dark:text-gray-400"
+                                           }  dark:hover:text-red-400 hover:text-red-500`}
+                    >
+                      
+                                           <HeartIcon className={`${
+                                             likesState[items._id] || items.likes.some((some:any)=>some.userId==userId)
+                                               ? "fill-red-500 text-red-500 dark:text-red-400"
+                                               : "text-gray-500 dark:text-gray-400"
+                                           }  dark:hover:text-red-400 w-5 h-5 hover:text-red-500`} />
+                                           <span className="text-xs">{items.likes.length + (likesState[items._id] ? 1 : 0)}</span>
+                                         </Button>)}
+                       {/* <span>32K</span> */}
+                     </div>
+                     <div className="flex items-center">
+                       <Share className="h-5 w-5 mr-1 "/>
+                      
+                     </div>
+                   </div>
+                 </CardContent>
+               </Card>
+                 </Link>
       
     ))}
+      </div>
   </>
   )
 }
