@@ -239,23 +239,18 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
         </p>
                    
                    <div className="rounded-lg overflow-hidden mb-3">
-                       {items.image && (<Image
+                      {items.image && (
+                  
+                  
+                        <Image
                          src={items.image}
                          alt="Post image"
                          width={400}
                          height={200}
-                         className="w-full sm:hidden flex object-cover"
+                         className="w-full  sm:object-scale-down flex object-cover"
                        />
-                                        <div className="max-w-[600px] sm:flex hidden w-full mx-auto aspect-[16/9]">
-      <Image
-        src={items.image}
-        alt="Post image"
-        width={600}
-        height={337} 
-        className="w-full h-full object-scale-down rounded-lg"
-        priority={false} // Optimize loading
-      />
-    </div>
+                                        
+                 
                                        )}
                         {items.video && (
                            <div  onClick={(e) => { e.stopPropagation(), e.preventDefault() }} className="w-full rounded-lg overflow-hidden">
