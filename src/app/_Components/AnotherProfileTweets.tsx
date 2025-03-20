@@ -197,7 +197,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
             
               
               {items?.adminId?.isVerified && <Verified className="text-white fill-blue-500" />}
-              <span className="text-sm text-gray-500 dark:text-gray-400">{items.adminId?.username}</span>
+              <span className="text-sm sm:flex hidden  text-gray-500 dark:text-gray-400">{items.adminId?.username}</span>
               <span className="text-sm text-gray-500 dark:text-gray-400">·</span>
               <span className="text-sm text-gray-500 dark:text-gray-400">{formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}</span>
                   </div>
