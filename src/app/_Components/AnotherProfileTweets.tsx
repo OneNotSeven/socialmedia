@@ -227,7 +227,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
 </p>
 
             {/* Media Section */}
-            <div className="mt-2 sm:w-full w-[347px]  overflow-hidden rounded-lg">
+            <div className="mt-2 sm:w-full w-full  overflow-hidden rounded-lg">
               {items.image && (
                 <Image
                   src={items.image}
