@@ -53,7 +53,7 @@ const CommentModal = ({
         setloader(false)
         setNewComment(""); 
         setRefresh(true);
-        console.log("adminid:",adminId,"userid:",userId)
+        
         if (adminId !== userId) {
           
           const notificationRef = ref(realDatabase, `notifications/${adminId}`);
@@ -95,7 +95,7 @@ const CommentModal = ({
   const tweetContent = contentData.text;
   const [showFullTweet, setShowFullTweet] = useState(false);
   const isLongTweet = tweetContent.length > 100;
-console.log("basic info",basicInfo)
+
   return (
     <div className="p-3">
 
