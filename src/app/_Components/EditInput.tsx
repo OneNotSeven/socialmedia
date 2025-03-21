@@ -14,8 +14,7 @@ const EditInput = ({ profileInfo,userId }:any
   const [populateDetails, setpopulateDetails] = useState<Profile>(profileInfo)
   const [userExist, setuserExist] = useState<string>("")
   const [loading, setloading] = useState<boolean>(false)
-    console.log("checking my details", populateDetails)
-    console.log("checking my id", userId)
+   
     
     useEffect(() => {
         if (profileInfo) {
@@ -70,8 +69,7 @@ const EditInput = ({ profileInfo,userId }:any
     } 
   }
   
-    console.log("values", values)
-    console.log("error",errors)
+   
   return (
       <>
       {populateDetails && <div className=" sm:w-[90%] w-full text-[#202142]">
