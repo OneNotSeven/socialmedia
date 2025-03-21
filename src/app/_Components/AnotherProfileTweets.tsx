@@ -247,7 +247,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                          alt="Post image"
                          width={400}
                          height={200}
-                         className="w-full  sm:object-scale-down flex object-cover"
+                         className="w-full flex object-cover"
                        />
                                         
                  
