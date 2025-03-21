@@ -112,7 +112,7 @@ const Suggested = ({ userid }: any) => {
                                 </Avatar>
                                 <div>
                                     <div className="flex items-center gap-1">
-                                       <a  href={ `profiles/${item.username}`}><p className="text-sm font-medium">{item.name}</p></a> 
+                                       <a  href={ `/profiles/${item.username}`}><p className="text-sm font-medium">{item.name}</p></a> 
                                         {item.isVerified && <Verified className="fill-blue-500 text-white" />}
                                         <p className="text-xs text-gray-500">{item.username || ""}</p>
                                     </div>
