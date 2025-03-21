@@ -24,7 +24,7 @@ const MembersModal = ({ members, isOpen, setIsOpen, adminId,userId,communityId }
   const handleRemove = async (memberId: string) => {
     try {
       setLoadingIds((prev) => [...prev, memberId]);
-      console.log("Removing member:", memberId);
+     
       const leave = await leaveCommunity(communityId, memberId)
       if (leave.success == true) {
         setMemberList((prev) => prev.filter((member) => member._id !== memberId));
@@ -37,7 +37,7 @@ const MembersModal = ({ members, isOpen, setIsOpen, adminId,userId,communityId }
     }
     
   };
-  console.log("Removing member:", memberList);
+  
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -96,7 +96,7 @@ const MembersModal = ({ members, isOpen, setIsOpen, adminId,userId,communityId }
 };
 
 const CommunityHeader = ({ content,userId }: any) => {
-  console.log("content header", content);
+  
   const [isOpen, setIsOpen] = useState(false);
   const [popOpen, setpopOpen] = useState(false)
   const [Loading, setLoading] = useState(false)
@@ -144,7 +144,7 @@ const CommunityHeader = ({ content,userId }: any) => {
           </div>
 
           {/* Admin Info */}
-          <div className="flex gap-2 sm:mr-10  mr-0 items-center">
+          <div className="sm:flex hidden gap-2 sm:mr-10  mr-0 items-center">
             <div className="sm:w-10 sm:h-10 w-5 h-5 rounded-full overflow-hidden">
               <Image
                 className="object-cover"
