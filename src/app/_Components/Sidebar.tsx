@@ -7,13 +7,13 @@ import { realDatabase } from "@/lib/firebase";
 import { BasicInfo, getToken } from "@/controllers/controller";
 import NotificationSlider from "./NotificationSlider";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Sidebar = ({ check }: any) => {
   const router = useRouter()
-  const params = useParams()
+  const params = useParams() as Record<string, string>
   const pathname = usePathname();
   
-  console.log("params",pathname)
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [hasNewComment, setHasNewComment] = useState<boolean>(false);
   const [hasNewLike, setHasNewLike] = useState<boolean>(false);
@@ -186,28 +186,43 @@ const Sidebar = ({ check }: any) => {
         <NotificationSlider onClose={() => { setIsSliderOpen(false); setCollapsed(false); }} userId={userId} />
       )}
 
-      <div className={`w-full sm:hidden h-16 flex items-center justify-center  fixed bottom-0 bg-white shadow-md z-50 ${pathname==`/view-community/${params.id}` ? 'hidden' : 'flex'}`}>
+      <div className={`w-full sm:hidden h-16 flex items-center justify-center  fixed bottom-0 bg-white shadow-lg z-50 ${pathname==`/view-community/${params.id}` ? 'hidden' : 'flex'}`}>
         <div className="flex w-full">
           <div className="flex justify-evenly w-full items-center h-12 rounded-t-md gap-2">
             <a href="/">
 
-            <div ><HomeIcon className={`text-gray-700 ${pathname=="/"?'text-gray-900':null}`}/></div>
+            <div ><HomeIcon className={`text-gray-700 ${pathname=="/"?'text-indigo-600':null}`}/></div>
             </a>
             <a href="/build-community">
 
-            <div > <Users className={`text-gray-700 ${pathname=="/build-community"?'text-gray-900':null}`} /></div>
+            <div > <Users className={`text-gray-700 ${pathname=="/build-community"?'text-indigo-600':null}`} /></div>
             </a>
             <a href="/explore">
-            <div ><SearchIcon className={`text-gray-700 ${pathname=="/explore"?'text-gray-900':null}`}/></div>
+            <div ><SearchIcon className={`text-gray-700 ${pathname=="/explore"?'text-indigo-600':null}`}/></div>
             </a>
             <div className="relative" onClick={handler}>
             {hasNewLike && (
                     <span className="absolute top-0 left-5 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                   )}
-            <div ><Bell className={`text-gray-700 ${isSliderOpen}?'text-gray-900':null}`}/></div>
+            <div ><Bell className={`text-gray-700 ${isSliderOpen?'text-indigo-600':null}`}/></div>
             </div>
             <a href={`/profiles/${infoUser[0]?.username}`}>
-            <div ><User className={`${pathname === `/profiles/${params.id}` }?'fill-black':null}`} /></div>
+              <div >
+                {/* <User className={`text-gray-700 ${pathname == params ? 'text-indigo-600' : null}`} /> */}
+                <div className={`relative  w-6 h-6 ${pathname == `/profiles/${infoUser[0]?.username}` ? 'ring-indigo-600 ring-2' : null}  overflow-hidden rounded-full`}>
+                                <Image
+                                  src={infoUser[0]?.profilePic || "/profile.jpg"}
+                                  alt="Profile picture"
+                                  
+                                  width={200}
+                    height={200}
+                    quality={100}
+                                  className="object-cover"
+                                  priority
+                  />
+            
+                              </div>
+              </div>
             </a>
 </div>
         </div>
