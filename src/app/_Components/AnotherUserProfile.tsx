@@ -26,7 +26,7 @@ const AnotherUserProfile = ({ username }: any) => {
             setuserId(userId)
             const userProfile = await getUserProfile(username)
             if (userProfile.success == true) {
-                console.log(userProfile.data)
+               
                 setprofile(userProfile.data)
             }
             
@@ -51,7 +51,7 @@ const AnotherUserProfile = ({ username }: any) => {
           setcheck(true)
           setloader(false)
         }
-        console.log("unfollow api",unfollowapi)
+        
       } catch (error) {
         console.log("error",error)
       } finally {
@@ -84,7 +84,7 @@ const AnotherUserProfile = ({ username }: any) => {
     
     }
   }
-    console.log("profile dynamic",profile?.followers.flat())
+    
 
   return (
       <>
@@ -248,7 +248,7 @@ const DropDown = ({ userId,authuser}:any) => {
             return acc;
           }, {});
           
-          console.log("Fetched community data::", wholeCommunity)
+          
         } catch (error) {
           console.error("Error fetching community data:", error)
         } 
@@ -277,7 +277,7 @@ const DropDown = ({ userId,authuser}:any) => {
         setProcessing((prev) => ({ ...prev, [communityId]: false }));
     }
       }
-    console.log("another ccc",communityData)
+    
    
     return (
         <DropdownMenu>
@@ -338,7 +338,7 @@ const DropDown = ({ userId,authuser}:any) => {
 const FollowersModal = ({ title, list}: { title: string; list: any[]; userid:any }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  console.log("followersmodal",list)
+  
 
   // Filter list based on search query (case-insensitive)
   const filteredList = list.filter(user =>
