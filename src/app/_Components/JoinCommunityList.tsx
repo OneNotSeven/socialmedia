@@ -31,7 +31,7 @@ const JoinCommunityList = ({ userid, paramsid }: any) => {
     }
   }, [userid]); // Added dependency to refetch when `userid` changes
 
-  console.log("Joined Communities:", list);
+  
 
   return (
     <div className="min-h-screen w-96 text-gray-100 mx-auto max-w-96">
