@@ -92,7 +92,7 @@ const AnotherUserProfile = ({ username }: any) => {
       {profile ? < div className="max-w-2xl sm:w-fit w-full mx-auto p-2" >
         <div className="space-y-8 w-full">
           {/* Profile Header */}
-          <div className="flex items-center justify-between sm:gap-8 gap-2">
+          <div className="flex items-center justify-between sm:gap-8 gap-3">
             <div className="relative">
               <div className="relative sm:h-44 sm:w-44 w-24 h-24  overflow-hidden rounded-full">
                 <Image
