@@ -113,7 +113,7 @@ console.log("basic info",basicInfo)
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center gap-1">
               <p className="font-semibold">{ contentData.adminId.name}</p>
-              <p className="text-gray-600 text-sm">{contentData.adminId.username} · {formatDistanceToNow(new Date(contentData.createdAt), { addSuffix: true })}</p>
+              <p className="text-gray-600 text-sm"> · {formatDistanceToNow(new Date(contentData.createdAt), { addSuffix: true })}</p>
           </div>
           <div className="mt-1 text-gray-900 text-sm sm:text-base">
             <p className="text-sm">
