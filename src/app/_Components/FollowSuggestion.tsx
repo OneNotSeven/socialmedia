@@ -101,10 +101,12 @@ const FollowSuggestion = ({ userid}:any) => {
                           <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-semibold flex items-center">
+                         <a href={`/profiles/${item.username}`}>
+                             <div className="font-semibold flex items-center">
                             {item.name}
                             {item.isVerified && <Verified className='fill-blue-500 text-white' />}
                           </div>
+                         </a> 
                           <p className='text-[12px]'>{ item.username}</p>
 
                         </div>
