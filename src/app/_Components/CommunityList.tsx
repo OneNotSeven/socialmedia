@@ -26,7 +26,7 @@ const CommunityList = ({ userId }: any) => {
           setcommunityData(wholeCommunity?.data || []) 
           setverify(true)
         }
-        console.log("Fetched community data:", wholeCommunity)
+        
       } catch (error) {
         console.error("Error fetching community data:", error)
       } finally {
