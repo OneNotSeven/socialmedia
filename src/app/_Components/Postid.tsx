@@ -119,7 +119,7 @@ const Postid = ({ postId, userId }: any) => {
       setloaderPost(false)
     }
   };
-console.log("main content",content)
+
   return (
     <>
       <div className='flex flex-col mx-auto gap-3'>
