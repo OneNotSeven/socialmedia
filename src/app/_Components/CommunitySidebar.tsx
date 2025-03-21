@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 const CommunitySidebar = () => {
   const params = useParams()
   const router = useRouter()
-  console.log("gabbar", params)
+  
 
   const [change, setchange] = useState<boolean>(true)
   const [communityData, setcommunityData] = useState<any>([])
@@ -31,7 +31,7 @@ const CommunitySidebar = () => {
         setLoading(true)
         const wholeCommunity = await gettingCommmunity(userId)
         setcommunityData(wholeCommunity?.data || []) // Ensure fallback if no data
-        console.log("Fetched community data:", wholeCommunity)
+        
       } catch (error) {
         console.error("Error fetching community data:", error)
       } finally {
@@ -43,7 +43,7 @@ const CommunitySidebar = () => {
     }
   }, [userId])
 
-  console.log("community data user", communityData)
+ 
 
   return (
     <>
