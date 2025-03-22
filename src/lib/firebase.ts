@@ -7,7 +7,7 @@ import { getStorage } from "firebase/storage"
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
-  databaseURL:"https://firedatabase-39b76-default-rtdb.firebaseio.com/",
+  databaseURL:process.env.NEXT_DB_URL,
   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_PROJECTID,
   storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
