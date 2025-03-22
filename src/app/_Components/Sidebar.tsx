@@ -178,10 +178,10 @@ const Sidebar = ({ check }: any) => {
 
             <ul className={`pt-4 mt-4 pl-2 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700 ${check ? "pl-4" : ""}`}>
               <li>
-                <Link href="/get-verified" className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
+                <a href="/get-verified" className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
                   <Verified />
                   {!collapsed && <span className="ms-3">Verified</span>}
-                </Link>
+                </a>
               </li>
               <li>
                 <Link href="/build-community" className="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -198,7 +198,7 @@ const Sidebar = ({ check }: any) => {
             </ul>
             </div>
             {infoUser && infoUser[0]?.username && (
-      <div className="w-full mt-36 bg-slate-100 rounded-lg flex items-center gap-3 p-3 relative">
+      <div className={`w-full mt-36 bg-slate-100 rounded-lg flex items-center ${collapsed?"justify-center":null} gap-3 p-3 relative`}>
         {/* Avatar */}
         <Avatar>
           <AvatarImage className="object-cover" src={infoUser[0]?.profilePic || "/profile.jpg"} />
@@ -206,34 +206,35 @@ const Sidebar = ({ check }: any) => {
         </Avatar>
 
         {/* User Info */}
-        <div className="flex flex-col flex-grow">
-          <p className="font-semibold">{infoUser[0]?.name}</p>
-          <p className="text-[12px] text-gray-400">{infoUser[0]?.username}</p>
-        </div>
+                {!collapsed && <div className="flex flex-col flex-grow">
+                  <p className="font-semibold">{infoUser[0]?.name}</p>
+                  <p className="text-[12px] text-gray-400">{infoUser[0]?.username}</p>
+                </div>}
 
         {/* Three Dots Button */}
-        <div className="relative">
-          <button onClick={() => setShowLogout(!showLogout)}>
-                    <MoreHorizontalIcon className="cursor-pointer" />
+                {!collapsed &&
+                  <div className="relative">
+                    <button onClick={() => setShowLogout(!showLogout)}>
+                      <MoreHorizontalIcon className="cursor-pointer" />
                     
-          </button>
+                    </button>
 
-          {/* Logout Popup */}
-          {showLogout && (
-            <div className="absolute right-0 mt-2 w-36 bg-white shadow-md rounded-md p-2 z-50">
-              <button 
-                onClick={() => { 
-                  // Add logout logic here
-                  logout()
+                    {/* Logout Popup */}
+                    {showLogout && (
+                      <div className="absolute right-0 mt-2 w-36 bg-white shadow-md rounded-md p-2 z-50">
+                        <button
+                          onClick={() => {
+                            // Add logout logic here
+                            logout()
                   
-                }}
-                className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md text-red-600"
-              >
-                        {loader ? "Logout..." : "Logout"}
-              </button>
-            </div>
-          )}
-        </div>
+                          }}
+                          className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md text-red-600"
+                        >
+                          {loader ? "Logout..." : "Logout"}
+                        </button>
+                      </div>
+                    )}
+                  </div>}
       </div>
     )}
           </aside>
