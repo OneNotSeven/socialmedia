@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { gettingNotification } from "@/controllers/controller";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import Image from "next/image";
 
 interface NotificationSliderProps {
   onClose: () => void;
@@ -91,17 +92,20 @@ const NotificationSlider = ({ onClose, userId }: NotificationSliderProps) => {
                   {newNotifications.map((notif:any, index:number) => (
                     <div key={index} className="flex items-center p-2 border-b dark:border-gray-700">
                       {/* User Profile Pic */}
-                      <img
+                      <Image
+                        width={40}
+                        height={40}
+                        quality={100}
                         src={notif.userId?.profilePic || "/default-avatar.png"}
                         alt="User Avatar"
-                        className="w-10 h-10 rounded-full mr-3"
+                        className="w-10 h-10 object-cover rounded-full mr-3"
                       />
 
                       <div className="flex-1">
                         <p className="text-sm">
-                          <a href={`profiles/${notif.userId?.username}`}><span className="font-semibold">{notif.userId?.name}</span></a>{" "}
-                          <a href={`profiles/${notif.userId?.username}`}> <span className="text-blue-500 cursor-pointer text-sm">{notif.userId?.username}</span></a>{" "}
-                          {notif.type === "like" ? "liked" : "commented on"} your tweet.
+                          <Link href={`profiles/${notif.userId?.username}`}><span className="font-semibold">{notif.userId?.name}</span></Link>{" "}
+                          <Link href={`profiles/${notif.userId?.username}`}> <span className="text-blue-500 cursor-pointer text-sm">{notif.userId?.username}</span></Link>{" "}
+                          {notif.type === "like" ? "liked ❤️" : "commented on"} your tweet.
                         </p>
                         {notif.contentId && (
                          <Link href={`/post/${notif.contentId._id}`}>
@@ -131,24 +135,26 @@ const NotificationSlider = ({ onClose, userId }: NotificationSliderProps) => {
                   {oldNotifications.map((notif:any, index:number) => (
                     <div key={index} className="flex items-center p-2 border-b dark:border-gray-700">
                       {/* User Profile Pic */}
-                      <img
+                      <Image
+                        width={40}
+                        height={40}
                         src={notif.userId?.profilePic || "/default-avatar.png"}
                         alt="User Avatar"
-                        className="w-10 h-10 rounded-full mr-3"
+                        className="w-10 h-10 object-cover rounded-full mr-3"
                       />
 
                       <div className="flex-1">
                         <p className="text-sm">
-                        <a href={`profiles/${notif.userId?.username}`}><span className="font-semibold">{notif.userId?.name}</span></a>{" "}
-                        <a href={`profiles/${notif.userId?.username}`}> <span className="text-blue-500 cursor-pointer text-sm">{notif.userId?.username}</span></a>{" "}
-                          {notif.type === "like" ? "liked" : "commented on"} your tweet.
+                        <Link href={`profiles/${notif.userId?.username}`}><span className="font-semibold">{notif.userId?.name}</span></Link>{" "}
+                        <Link href={`profiles/${notif.userId?.username}`}> <span className="text-blue-500 cursor-pointer text-sm">{notif.userId?.username}</span></Link>{" "}
+                          {notif.type === "like" ? "liked ❤️" : "commented on"} your tweet.
                         </p>
                         {notif.contentId && (
-                          <a href={`post/${notif.contentId._id}`}><div className="mt-1 bg-gray-100 dark:bg-gray-700 p-2 rounded-md">
+                          <Link href={`post/${notif.contentId._id}`}><div className="mt-1 bg-gray-100 dark:bg-gray-700 p-2 rounded-md">
                           <p className="text-xs text-gray-700 dark:text-gray-300">
                           &quot;{truncateText(notif.contentId.text)}&quot;
                           </p>
-                        </div></a>
+                        </div></Link>
                         )}
                         <span className="text-xs text-gray-500">
                           {new Date(notif.timestamp).toLocaleString()}
