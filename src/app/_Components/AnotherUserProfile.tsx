@@ -1,7 +1,7 @@
 "use client"
 import { followUser, gettingCommmunity, getToken, getUserProfile, sendRequest, unFollowUser } from '@/controllers/controller'
 import React, { useEffect, useState } from 'react'
-import { ChevronDown, Loader,Settings, Verified } from "lucide-react"
+import { ChevronDown, Loader,Loader2Icon,Settings, Verified } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -221,7 +221,7 @@ const AnotherUserProfile = ({ username }: any) => {
           <AnotherProfileTweets data={profile.posts} userid={userId} setdelrender={setdelrender} />
         </div>
       </div > : <div className='w-full h-screen flex justify-center items-center'>
-        <Loader className='w-8 h-8 text-blue-500 animate-spin' />
+        <Loader2Icon className='w-8 h-8 text-blue-500 animate-spin' />
       </div>}
         
      
