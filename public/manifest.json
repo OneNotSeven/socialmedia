@@ -5,12 +5,12 @@
     "icons": [
       {
         "src": "/twins.png",
-        "sizes": "192x192",
+        "sizes": "1080x1350",
         "type": "image/png"
       },
       {
         "src": "/twins.png",
-        "sizes": "512x512",
+        "sizes": "1080x1350",
         "type": "image/png"
       }
     ],
