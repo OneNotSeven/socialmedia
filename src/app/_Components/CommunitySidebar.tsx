@@ -86,11 +86,11 @@ const CommunitySidebar = () => {
                               key={idx}
                               className={`flex w-full ${items._id == params.id ? "bg-gray-100" : null} items-center p-4 transition-colors hover:bg-[#e3e3e3]`}
                             >
-                              <div className="rounded-md px-4 py-2 text-sm font-medium transition-colors text-gray-800 hover:bg-gray-200">
+                              <div className="rounded-md sm:px-4 px-2 py-2 text-sm font-medium transition-colors text-gray-800 hover:bg-gray-200">
                                 <UsersIcon className="h-5 w-5 text-gray-800" />
                               </div>
-                              <div className="ml-4 flex-1">
-                                <div className='w-[354px] truncate'>
+                              <div className="sm:ml-4 ml-2 flex-1">
+                                <div className='sm:w-[354px] w-[250px] truncate'>
                                   <h3 className="font-medium text-gray-800 truncate">{items.branchName}</h3>
                                   <p className="text-sm text-gray-800 truncate">{items.bio}</p>
                                 </div>
