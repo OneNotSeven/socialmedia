@@ -206,7 +206,7 @@ const Sidebar = ({ check }: any) => {
                   )}
             <div ><Bell className={`text-gray-700 ${isSliderOpen?'text-indigo-600':null}`}/></div>
             </div>
-            <a href={`/profiles/${infoUser[0]?.username}`}>
+            <Link href={`/profiles/${infoUser[0]?.username}`}>
               <div >
                 {/* <User className={`text-gray-700 ${pathname == params ? 'text-indigo-600' : null}`} /> */}
                 <div className={`relative  w-6 h-6 ${pathname == `/profiles/${infoUser[0]?.username}` ? 'ring-indigo-600 ring-2' : null}  overflow-hidden rounded-full`}>
@@ -223,7 +223,7 @@ const Sidebar = ({ check }: any) => {
             
                               </div>
               </div>
-            </a>
+            </Link>
 </div>
         </div>
       </div>
