@@ -339,3 +339,11 @@ const usersRes=await users.json()
     return { data: [], success: false };
   }
 };
+
+export const LogOut = async() => {
+  const users = await fetch(`${appBaseUrl}/api/logout`, {
+    method: "Post",
+  })
+  const usersres = await users.json()
+  return usersres
+}
