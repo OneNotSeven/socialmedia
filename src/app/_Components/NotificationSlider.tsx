@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { gettingNotification } from "@/controllers/controller";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 interface NotificationSliderProps {
   onClose: () => void;
@@ -61,7 +62,7 @@ const NotificationSlider = ({ onClose, userId }: NotificationSliderProps) => {
         </div>
 
         {/* Notification List */}
-        <div className="overflow-y-auto h-screen pb-14 p-4">
+        <div className="overflow-y-auto h-screen pb-36 p-4">
           {loading ? (
             <div className="text-gray-500 w-full flex text-center gap-2 mt-10">
               <div className="w-10 h-10">
@@ -103,14 +104,14 @@ const NotificationSlider = ({ onClose, userId }: NotificationSliderProps) => {
                           {notif.type === "like" ? "liked" : "commented on"} your tweet.
                         </p>
                         {notif.contentId && (
-                         <a href={`/post/${notif.contentId._id}`}>
+                         <Link href={`/post/${notif.contentId._id}`}>
                             
                          <div className="mt-1 bg-gray-100 dark:bg-gray-700 p-2 rounded-md">
                             <p className="text-xs text-gray-700 dark:text-gray-300">
                               "{truncateText(notif.contentId.text)}"
                             </p>
                           </div>
-                         </a> 
+                         </Link> 
                         )}
                         <span className="text-xs text-gray-500">
                           {new Date(notif.timestamp).toLocaleString()}
