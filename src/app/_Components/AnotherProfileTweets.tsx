@@ -17,7 +17,7 @@ import { appBaseUrl } from "@/schema/appurl";
 import Link from "next/link";
 
 const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:any,setdelrender:React.Dispatch<React.SetStateAction<boolean>> }) => {
-  const [contentData, setContentData] = useState<any[]>([]);
+  const [contentData, setContentData] = useState<any[]>([].reverse());
   const [sendData, setsendData] = useState<any>({})
    const [likesState, setLikesState] = useState<{ [key: string]: boolean }>({});
   const [commentCounts, setCommentCounts] = useState<{ [key: string]: number }>({});
@@ -181,7 +181,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
       <div className='text-2xl font-semibold pb-3  text-gray-600'>All post</div>
       <div className="flex flex-col gap-2 w-full">
 
-      {[...contentData].reverse()?.map((items: any, idx: number) => (
+      {contentData?.map((items: any, idx: number) => (
        
         <Link key={items._id} href={`/post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-full w-full sm:mt-2 mt-3">
 
