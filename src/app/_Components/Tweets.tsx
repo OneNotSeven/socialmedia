@@ -157,7 +157,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
       }
     }
 
-  console.log("last trial",infoUser)
+
   return (
     <>
       {isCommentModalOpen && selectedContentId && (
