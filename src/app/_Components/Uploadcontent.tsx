@@ -188,7 +188,7 @@ const [hashtags, sethashtags] = useState<string[]>([])
           </Button>
 
           {showPicker && (
-            <div className="absolute bottom-12 left-0 z-10 bg-white shadow-md rounded-lg">
+            <div className="absolute bottom-12 top-12 left-[-57px] left-0 z-10 bg-white shadow-md rounded-lg">
               <Picker data={emojiData} onEmojiSelect={addEmoji} />
             </div>
           )}
