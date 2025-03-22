@@ -1,19 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, Home, Search, User, Users, Verified, HelpCircle, SearchIcon, HomeIcon } from "lucide-react";
+import { Bell, Home, Search, User, Users, Verified, HelpCircle, SearchIcon, HomeIcon, MoreHorizontalIcon } from "lucide-react";
 import { ref, onValue, update } from "firebase/database";
 import { realDatabase } from "@/lib/firebase";
-import { BasicInfo, getToken } from "@/controllers/controller";
+import { BasicInfo, getToken, LogOut } from "@/controllers/controller";
 import NotificationSlider from "./NotificationSlider";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Sidebar = ({ check }: any) => {
   const router = useRouter()
   const params = useParams() as Record<string, string>
   const pathname = usePathname();
-  
+  const [loader, setloader] = useState<boolean>(false)
+  const [showLogout, setShowLogout] = useState(false);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [hasNewComment, setHasNewComment] = useState<boolean>(false);
   const [hasNewLike, setHasNewLike] = useState<boolean>(false);
@@ -100,6 +102,21 @@ const Sidebar = ({ check }: any) => {
     setIsSliderOpen((prev) => !prev);
   };
 
+  const logout = async () => {
+    try {
+      setloader(true)
+      const loggingOut = await LogOut()
+      if (loggingOut.success == true) {
+        setShowLogout(false);
+        router.push("/login")
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setloader(false)
+    }
+  }
+  
   return (
     <>
       <div className="sticky hidden h-screen top-0 sm:flex">
@@ -108,7 +125,9 @@ const Sidebar = ({ check }: any) => {
             {!collapsed && <span className="text-3xl pl-3 font-bold"><span className="font-[Pacifico]">Twins</span></span>}
           </div>
 
-          <aside id="logo-sidebar" className="h-full overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
+          <aside id="logo-sidebar" className="h-full flex flex-col  overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
+            <div>
+
             <ul className={`space-y-2 mt-2 pl-2 font-medium ${check ? "pl-4" : ""}`}>
 
               <a href="/">
@@ -177,6 +196,46 @@ const Sidebar = ({ check }: any) => {
                 </a>
               </li>
             </ul>
+            </div>
+            {infoUser && infoUser[0]?.username && (
+      <div className="w-full mt-36 bg-slate-100 rounded-lg flex items-center gap-3 p-3 relative">
+        {/* Avatar */}
+        <Avatar>
+          <AvatarImage className="object-cover" src={infoUser[0]?.profilePic || "/profile.jpg"} />
+          <AvatarFallback>{infoUser[0]?.username?.charAt(1).toUpperCase()}</AvatarFallback>
+        </Avatar>
+
+        {/* User Info */}
+        <div className="flex flex-col flex-grow">
+          <p className="font-semibold">{infoUser[0]?.name}</p>
+          <p className="text-[12px] text-gray-400">{infoUser[0]?.username}</p>
+        </div>
+
+        {/* Three Dots Button */}
+        <div className="relative">
+          <button onClick={() => setShowLogout(!showLogout)}>
+                    <MoreHorizontalIcon className="cursor-pointer" />
+                    
+          </button>
+
+          {/* Logout Popup */}
+          {showLogout && (
+            <div className="absolute right-0 mt-2 w-36 bg-white shadow-md rounded-md p-2 z-50">
+              <button 
+                onClick={() => { 
+                  // Add logout logic here
+                  logout()
+                  
+                }}
+                className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md text-red-600"
+              >
+                        {loader ? "Logout..." : "Logout"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
           </aside>
         </div>
       </div>
