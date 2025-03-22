@@ -338,7 +338,32 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                        {/* <span>32K</span> */}
                      </div>
                      <div className="flex items-center">
-                       <Share className="h-5 w-5 mr-1 "/>
+                        <Button
+    variant="ghost"
+    size="sm"
+    onClick={(e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      
+      const postUrl = `${appBaseUrl}/post/${items._id}`;
+
+      if (navigator.share) {
+        // Web Share API (for mobile & modern browsers)
+        navigator.share({
+          title: "Check out this post!",
+          text: items.text,
+          url: postUrl,
+        }).catch((err) => console.error("Error sharing:", err));
+      } else {
+        // Fallback: Copy to clipboard
+        navigator.clipboard.writeText(postUrl);
+        alert("Post link copied to clipboard!");
+      }
+    }}
+    className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
+  >
+    <Share className="h-5 w-5 mr-1" />
+  </Button>
                       
                      </div>
                    </div>
