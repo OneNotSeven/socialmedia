@@ -116,7 +116,7 @@ const Sidebar = ({ check }: any) => {
       setloader(false)
     }
   }
-  
+
   return (
     <>
       <div className="sticky hidden h-screen top-0 sm:flex">
@@ -130,7 +130,7 @@ const Sidebar = ({ check }: any) => {
 
             <ul className={`space-y-2 mt-2 pl-2 font-medium ${check ? "pl-4" : ""}`}>
 
-              <a href="/">
+              <Link href="/">
 
               <li className="cursor-pointer" >
                 <div className="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -138,8 +138,8 @@ const Sidebar = ({ check }: any) => {
                   {!collapsed && <span className="ms-3">Home</span>}
                 </div>
               </li>
-              </a>
-              <a href="/explore">
+              </Link>
+              <Link href="/explore">
 
               <li className="cursor-pointer" >
                 <div className="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -147,7 +147,7 @@ const Sidebar = ({ check }: any) => {
                   {!collapsed && <span className="ms-3">Explore</span>}
                 </div>
               </li>
-              </a>
+              </Link>
 
             
               <li className="cursor-pointer" onClick={handler}>
@@ -165,7 +165,7 @@ const Sidebar = ({ check }: any) => {
                 </p>
               </li>
 
-              <a href={`/profiles/${infoUser[0]?.username}`}>
+              <Link href={`/profiles/${infoUser[0]?.username}`}>
               
               <li className="cursor-pointer" >
                 <div className="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -173,15 +173,15 @@ const Sidebar = ({ check }: any) => {
                   {!collapsed && <span className="ms-3">Profile</span>}
                 </div>
               </li>
-              </a>
+              </Link>
             </ul>
 
             <ul className={`pt-4 mt-4 pl-2 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700 ${check ? "pl-4" : ""}`}>
               <li>
-                <a href="/get-verified" className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
+                <Link href="/get-verified" className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
                   <Verified />
                   {!collapsed && <span className="ms-3">Verified</span>}
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/build-community" className="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
