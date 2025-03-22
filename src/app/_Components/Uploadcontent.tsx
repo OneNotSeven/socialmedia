@@ -80,7 +80,7 @@ const [hashtags, sethashtags] = useState<string[]>([])
       const data = await handleUpload(selectedFile);
     setdownloadUrl(data.message)
     return data.message
-    console.log("Firebase Upload Data:", data);
+
     };
     
   const dataUploading = async () => {
