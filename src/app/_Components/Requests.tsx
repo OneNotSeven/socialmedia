@@ -26,7 +26,7 @@ const Requests = ({communityId ,request,setcheck,branchname }: RequestDeatail) =
       
         setrequest(request)
     }, [request,Check])
-    console.log("request data", requestData)
+
     
     const accept = async (userId: string) => {
         setProcessing((prev) => ({ ...prev, [userId]: true }));
