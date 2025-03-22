@@ -181,7 +181,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
       <div className='text-2xl font-semibold pb-3  text-gray-600'>All post</div>
       <div className="flex flex-col gap-2 w-full">
 
-      {contentData?.map((items: any, idx: number) => (
+      {[...contentData].reverse()?.map((items: any, idx: number) => (
        
         <Link key={items._id} href={`/post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-full w-full sm:mt-2 mt-3">
 
