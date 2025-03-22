@@ -91,7 +91,7 @@ const SearchComponents = () => {
 
   // Handle keyboard navigation
  
-console.log("check my result",results)
+
   return (
     <div className="relative w-full max-w-lg">
       <div className="relative">
