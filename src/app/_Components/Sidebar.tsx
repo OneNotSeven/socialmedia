@@ -189,17 +189,17 @@ const Sidebar = ({ check }: any) => {
       <div className={`w-full sm:hidden h-16 flex items-center justify-center  fixed bottom-0 bg-white shadow-lg z-50 ${pathname==`/view-community/${params.id}` ? 'hidden' : 'flex'}`}>
         <div className="flex w-full">
           <div className="flex justify-evenly w-full items-center h-12 rounded-t-md gap-2">
-            <a href="/">
+            <Link href="/">
 
             <div ><HomeIcon className={`text-gray-700 ${pathname=="/"?'text-indigo-600':null}`}/></div>
-            </a>
-            <a href="/build-community">
+            </Link>
+            <Link href="/build-community">
 
             <div > <Users className={`text-gray-700 ${pathname=="/build-community"?'text-indigo-600':null}`} /></div>
-            </a>
-            <a href="/explore">
+            </Link>
+            <Link href="/explore">
             <div ><SearchIcon className={`text-gray-700 ${pathname=="/explore"?'text-indigo-600':null}`}/></div>
-            </a>
+            </Link>
             <div className="relative" onClick={handler}>
             {hasNewLike && (
                     <span className="absolute top-0 left-5 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
