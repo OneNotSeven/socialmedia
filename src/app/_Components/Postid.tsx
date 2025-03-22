@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
-import { Heart, Loader, MessageCircle, MoreHorizontal, SendHorizontalIcon, Share, SmilePlus, Verified } from "lucide-react";
+import { Heart, Loader, MessageCircle, MoreHorizontal, SendHorizontalIcon, Share, SmilePlus, Trash, Verified } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { deleteComment, getcontent, sendingComment } from '@/controllers/controller';
@@ -122,7 +122,7 @@ const Postid = ({ postId, userId }: any) => {
 
   return (
     <>
-      <div className='flex flex-col mx-auto gap-3'>
+      <div className='flex flex-col pb-20 mx-auto gap-3'>
         <div className="bg-white dark:bg-gray-800 mx-auto rounded-lg sm:w-[650px] w-full p-4">
           {content.map((items: any, idx: number) => (
             <div key={idx} className="flex items-start space-x-3">
@@ -167,7 +167,7 @@ const Postid = ({ postId, userId }: any) => {
           {content.length > 0 && <div className='flex gap-1 items-center'>
             <Button onClick={() => setShowPicker(!showPicker)} className='bg-transparent hover:bg-transparent shadow-none'><SmilePlus className='text-gray-500' /></Button>
             {showPicker && (
-                        <div className="absolute top-40 left-[500px] z-10 bg-white shadow-md rounded-lg">
+                        <div className="absolute sm:top-40 top-[38rem] left-1 sm:left-[500px] z-10 bg-white shadow-md rounded-lg">
                           <Picker data={emojiData} onEmojiSelect={addEmoji} />
                         </div>
                       )}
@@ -178,13 +178,13 @@ const Postid = ({ postId, userId }: any) => {
           </div>}
           {comments.length > 0 && (
             <>
-              <div className='font-semibold mt-6'>Comments {(comments.length)}</div>
+              <div className='font-semibold p-3 mt-6'>Comments {(comments.length)}</div>
               <div className='mt-6 sm:p-0 p-3 flex flex-col gap-6'>
                 {comments.map((items: any, idx: number) => (
                   <div key={idx} className='flex justify-between items-center gap-1'>
                     <div className='flex items-center gap-1'>
                       <Avatar>
-                        <AvatarImage src={items.userId.profilePic} alt="User Avatar" />
+                        <AvatarImage className='object-cover' src={items.userId.profilePic} alt="User Avatar" />
                         <AvatarFallback>AB</AvatarFallback>
                       </Avatar>
                       <div className='flex flex-col'>
@@ -196,7 +196,7 @@ const Postid = ({ postId, userId }: any) => {
                         <span className='text-gray-700 ml-1'>{items.text}</span>
                       </div>
                     </div>
-                    {items.userId._id === userId && <span onClick={() => { setCommentToDelete(items._id); setShowModal(true); }} className='text-red-500 cursor-pointer text-sm'>Remove</span>}
+                    {items.userId._id === userId && <span onClick={() => { setCommentToDelete(items._id); setShowModal(true); }} className='text-red-500 cursor-pointer text-sm'><Trash className='text-red-500 w-5 h-5'/></span>}
                   </div>
                 ))}
               </div>
@@ -211,9 +211,10 @@ const Postid = ({ postId, userId }: any) => {
               <DialogTitle>Confirm Deletion</DialogTitle>
             </DialogHeader>
             <p>Are you sure you want to delete this comment?</p>
-            <DialogFooter>
-              <Button onClick={() => setShowModal(false)}>Cancel</Button>
-              {loader ? <Button  className='bg-red-500 text-white'>Deleting...</Button> : <Button onClick={handleRemove} className='bg-red-500 text-white'>Delete</Button>}
+            <DialogFooter className='flex flex-col gap-3'>
+             
+              {loader ? <Button className='bg-red-500 text-white'>Deleting...</Button> : <Button onClick={handleRemove} className='bg-red-500 text-white'>Delete</Button>}
+              <Button className='bg-slate-200 text-black' onClick={() => setShowModal(false)}>Cancel</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
