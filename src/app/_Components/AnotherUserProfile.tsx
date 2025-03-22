@@ -129,7 +129,7 @@ const AnotherUserProfile = ({ username }: any) => {
                     )
                   ) : (
                       <>
-                       <a href="/profile/edit-profile"><Button className="bg-gray-500 sm:flex hidden ">Edit Profile</Button></a> 
+                       <Link href="/profile/edit-profile"><Button className="bg-gray-500 sm:flex hidden ">Edit Profile</Button></Link> 
                         
                       </>
                       
@@ -198,7 +198,7 @@ const AnotherUserProfile = ({ username }: any) => {
                     )
                   ) : (
                       <>
-                        <a href="/profile/edit-profile"><Button className="bg-gray-500 sm:hidden flex ">Edit Profile</Button></a> 
+                        <Link href="/profile/edit-profile"><Button className="bg-gray-500 sm:hidden flex ">Edit Profile</Button></Link> 
                         
                       </>
                       
