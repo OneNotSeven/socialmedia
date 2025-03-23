@@ -117,7 +117,7 @@ try {
       </Accordion>
       
                 <DialogFooter>
-              <Button onClick={communitySaved}>{loader ?<Loader2 className="text-white" />: "Save"}</Button>
+              <Button onClick={communitySaved}>{loader ?<Loader2 className="text-white animate-spin" />: "Save"}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
