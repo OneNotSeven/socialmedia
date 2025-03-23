@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Heart, MessageCircle, Share, VerifiedIcon,Verified } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { BasicInfo, gettingContent, getToken, sendingLikes, UnLikes } from "@/controllers/controller";
@@ -36,6 +36,8 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
 
   const videoRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
+  
+
   useEffect(() => {
     try {
       setloading(true)
@@ -58,10 +60,11 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
         // Initialize likes state
         const initialLikes: { [key: string]: boolean } = {};
         response.data.forEach((item: any) => {
-          initialLikes[item._id] = item.likes.includes(userid);
+          initialLikes[item._id] = item.likes.some((like: any) => like.userId === userid);
         });
         setLikesState(initialLikes);
-      };
+      }
+  
       getContent();
     } catch (error) {
       console.log("something went wrong",error)
@@ -157,7 +160,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
       }
     }
 
-
+  console.log("last trial",infoUser)
   return (
     <>
       {isCommentModalOpen && selectedContentId && (
@@ -219,14 +222,12 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
    )}
  </p>
             
-            <div className="rounded-lg  overflow-hidden mb-3">
+            <div className="rounded-lg overflow-hidden mb-3">
                 {items.image && (<Image
                   src={items.image}
                   alt="Post image"
                   width={400}
                   height={200}
-                  quality={100}
-                      priority
                   className="w-full object-cover"
                 />)}
                  {items.video && (
@@ -275,73 +276,70 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
               </div>
               
               <div className="flex items-center">
-              { items.likes.some((some:any)=>some.userId==userId)? (<Button
-                                    variant="ghost"
-                                    size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent link click
-                        e.preventDefault(); // Prevent navigation
-                                      // setSelectedContentId(items._id);
-                                      // setAdminId(items.adminId._id);
-                                      handleUnlike(items._id)
-                                    }}
-                                    className={`${
-                                      likesState[items._id]?"text-gray-500 dark:text-gray-400"
-                                        : " text-red-500 dark:text-red-400"
-                                         
-                                    }  dark:hover:text-red-400 hover:text-red-500`}
-                                  >
-                                    <Heart className="h-5 w-5 mr-2" />
-                                    <span className="text-xs">{items.likes.length - (likesState[items._id] ? 1 : 0)}</span>
-                                  </Button>) :
-                                    (<Button
-                                    variant="ghost"
-                                    size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevent link click
-                          e.preventDefault(); // Prevent navigation
-                                      
-                                      handleLike(items._id,items.text,items.adminId._id)
-                                    }}
-                                    className={`${
-                                      likesState[items._id] || items.likes.some((some:any)=>some.userId==userId)
-                                        ? "fill-red-500 text-red-500 dark:text-red-400"
-                                        : "text-gray-500 dark:text-gray-400"
-                                    }  dark:hover:text-red-400 hover:text-red-500`}
-                                  >
-                                    <Heart className="h-5 w-5" />
-                                    <span className="text-xs">{items.likes.length + (likesState[items._id] ? 1 : 0)}</span>
-                                  </Button>)}
+              <Button
+  variant="ghost"
+  size="sm"
+  onClick={(e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const alreadyLiked =
+      likesState[items._id] !== undefined
+        ? likesState[items._id]
+        : items.likes.some((some: any) => some.userId == userId);
+
+    if (alreadyLiked) {
+      handleUnlike(items._id);
+    } else {
+      handleLike(items._id, items.text, items.adminId._id);
+    }
+  }}
+>
+  <Heart
+    className={`${
+      (likesState[items._id] !== undefined
+        ? likesState[items._id]
+        : items.likes.some((some: any) => some.userId == userId))
+        ? "fill-red-500 text-red-500 dark:text-red-400"
+        : "text-gray-500 dark:text-gray-400"
+    } dark:hover:text-red-400 h-5 w-5 mr-2 hover:text-red-500`}
+  />
+  <span className="text-xs">
+    {items.likes.length + (likesState[items._id] ? 1 : 0)}
+  </span>
+</Button>
+
+
                 {/* <span>32K</span> */}
               </div>
               <div className="flex items-center">
-                <Button
-    variant="ghost"
-    size="sm"
-    onClick={(e) => {
-      e.stopPropagation();
-      e.preventDefault();
-      
-      const postUrl = `${appBaseUrl}/post/${items._id}`;
-
-      if (navigator.share) {
-        // Web Share API (for mobile & modern browsers)
-        navigator.share({
-          title: "Check out this post!",
-          text: items.text,
-          url: postUrl,
-        }).catch((err) => console.error("Error sharing:", err));
-      } else {
-        // Fallback: Copy to clipboard
-        navigator.clipboard.writeText(postUrl);
-        alert("Post link copied to clipboard!");
-      }
-    }}
-    className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
-  >
-    <Share className="h-5 w-5 mr-1" />
-  </Button>
+                 <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      
+                      const postUrl = `${appBaseUrl}/post/${items._id}`;
                 
+                      if (navigator.share) {
+                        // Web Share API (for mobile & modern browsers)
+                        navigator.share({
+                          title: "Check out this post!",
+                          text: items.text,
+                          url: postUrl,
+                        }).catch((err) => console.error("Error sharing:", err));
+                      } else {
+                        // Fallback: Copy to clipboard
+                        navigator.clipboard.writeText(postUrl);
+                        alert("Post link copied to clipboard!");
+                      }
+                    }}
+                    className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
+                  >
+                    <Share className="h-5 w-5 mr-1" />
+                  </Button>
+               
               </div>
             </div>
           </CardContent>
