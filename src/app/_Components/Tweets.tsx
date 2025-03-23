@@ -160,7 +160,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
       }
     }
 
-  console.log("last trial",infoUser)
+  
   return (
     <>
       {isCommentModalOpen && selectedContentId && (
@@ -206,7 +206,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                    {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
                  </span>
                 </div>
-                                        <div className="text-xs text-muted-foreground">{items.adminId.username }</div>
+                                     <Link href={`/profiles/${items.adminId.username}`}>   <div className="text-xs text-muted-foreground">{items.adminId.username }</div></Link>
               </div>
             </div>
            
