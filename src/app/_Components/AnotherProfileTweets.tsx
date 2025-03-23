@@ -206,8 +206,8 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                     <div className="flex gap-1">
 
                                                    { items.adminId.name}
-                             <Verified className="fill-blue-500 w-5 h-5 text-white" />
-                             <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">
+                             {items.adminId.isVerified && <Verified className="fill-blue-500 w-5 h-5 text-white" />}
+                             <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">.
                           {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
                         </span>
                     </div>
