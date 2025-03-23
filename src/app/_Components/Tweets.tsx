@@ -198,16 +198,17 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                 <AvatarImage src={items.adminId?.profilePic || "/profile.jpg"} />
                 <AvatarFallback>U</AvatarFallback>
               </Avatar>
-              <div>
-                <div className="font-semibold text-sm flex gap-1 items-center">
+              <Link onClick={(e)=>{ e.stopPropagation();}} href={`/profiles/${items.adminId.username}`}>  <div>
+               <div className="font-semibold text-sm flex gap-1 items-center">
                                             { items.adminId.name}
-                       {items.adminId?.isVerfied && <Verified className="fill-blue-500 text-white" />}
+                      {items.adminId?.isVerfied && <Verified className="fill-blue-500 text-white" />}
                       <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">.
                    {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
                  </span>
                 </div>
-                                     <Link href={`/profiles/${items.adminId.username}`}>   <div className="text-xs text-muted-foreground">{items.adminId.username }</div></Link>
-              </div>
+                                  <div className="text-xs text-muted-foreground">{items.adminId.username }</div>
+                  </div>
+                  </Link>
             </div>
            
             <p className="text-sm mb-3">
