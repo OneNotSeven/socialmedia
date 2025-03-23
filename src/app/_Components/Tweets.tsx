@@ -199,10 +199,10 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                 <AvatarFallback>U</AvatarFallback>
               </Avatar>
               <div>
-                <div className="font-semibold text-sm flex items-center">
+                <div className="font-semibold text-sm flex gap-1 items-center">
                                             { items.adminId.name}
-                      <Verified className="fill-blue-500 text-white" />
-                      <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">
+                       {items.adminId?.isVerfied && <Verified className="fill-blue-500 text-white" />}
+                      <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">.
                    {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
                  </span>
                 </div>
