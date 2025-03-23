@@ -51,9 +51,10 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
     
     const initialLikes: { [key: string]: boolean } = {};
         data.forEach((item: any) => {
-          initialLikes[item._id] = item.likes.includes(userid);
+          initialLikes[item._id] = item.likes.some((like: any) => like.userId === userid);
         });
         setLikesState(initialLikes);
+      
    }, [userid,data])
   
   useEffect(() => {
@@ -101,7 +102,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
             [postId]: !prev[postId],
           }));
         }
-        if (adminId !== userId) {
+        if (adminid !== userId) {
           
           const notificationRef = ref(realDatabase, `notifications/${adminid}`);
           push(notificationRef, {
@@ -127,7 +128,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
       }, 500);
   };
   
-  const handleUnlike = async (postId: string, text: string, adminid: string) => {
+  const handleUnlike = async (postId: string) => {
     setLikesState((prev) => ({
       ...prev,
       [postId]: !prev[postId],
@@ -162,7 +163,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
     }
     
   }
-
+   console.log("content data ::",contentData)
   return (
     <>
     {isCommentModalOpen && selectedContentId && (
@@ -181,7 +182,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
       <div className='text-2xl font-semibold pb-3  text-gray-600'>All post</div>
       <div className="flex flex-col gap-2 w-full">
 
-      {contentData?.map((items: any, idx: number) => (
+      {contentData.map((items: any, idx: number) => (
        
         <Link key={items._id} href={`/post/${items._id}`} className="sm:hover:bg-slate-100 sm:w-full w-full sm:mt-2 mt-3">
 
@@ -239,7 +240,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
         </p>
                    
                    <div className="rounded-lg overflow-hidden mb-3">
-                      {items.image && (
+                {items.image && (
                   
                   
                         <Image
@@ -247,7 +248,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                          alt="Post image"
                          width={400}
                          height={200}
-                         className="w-full flex object-cover"
+                         className="w-full  flex object-cover"
                        />
                                         
                  
@@ -294,51 +295,42 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                      </div>
                      
                      <div className="flex items-center">
-                     { items.likes.some((some:any)=>some.userId==userId)? (<Button
-                                           variant="ghost"
-                                           size="sm"
-                                           onClick={(e) => {
-                                                                    e.stopPropagation(); // Prevent link click
-                                                                    e.preventDefault(); // Prevent navigation
-                                                              
-                                                              handleLike(items._id,items.text,items.adminId._id)
-                                                            }}
-                                           className={`${
-                                             likesState[items._id]?"text-gray-500 dark:text-gray-400"
-                                               : " text-red-500 dark:text-red-400"
-                                                
-                                           }  dark:hover:text-red-400 hover:text-red-500`}
-                                         >
-                                           <Heart className="h-5 w-5 mr-2" />
-                                           <span className="text-xs">{items.likes.length - (likesState[items._id] ? 1 : 0)}</span>
-                                         </Button>) :
-                                           (<Button
-                                           variant="ghost"
-                                           size="sm"
-                               onClick={(e) => {
-                                 e.stopPropagation(); // Prevent link click
-                                 e.preventDefault(); // Prevent navigation
-                                             
-                                             handleLike(items._id,items.text,items.adminId._id)
-                                           }}
-                                           className={`${
-                                             likesState[items._id] || items.likes.some((some:any)=>some.userId==userId)
-                                               ? "fill-red-500 text-red-500 dark:text-red-400"
-                                               : "text-gray-500 dark:text-gray-400"
-                                           }  dark:hover:text-red-400 hover:text-red-500`}
-                    >
-                      
-                                           <HeartIcon className={`${
-                                             likesState[items._id] || items.likes.some((some:any)=>some.userId==userId)
-                                               ? "fill-red-500 text-red-500 dark:text-red-400"
-                                               : "text-gray-500 dark:text-gray-400"
-                                           }  dark:hover:text-red-400 w-5 h-5 hover:text-red-500`} />
-                                           <span className="text-xs">{items.likes.length + (likesState[items._id] ? 1 : 0)}</span>
-                                         </Button>)}
+                     <Button
+                       variant="ghost"
+                       size="sm"
+                       onClick={(e) => {
+                         e.stopPropagation();
+                         e.preventDefault();
+                     
+                         const alreadyLiked =
+                           likesState[items._id] !== undefined
+                             ? likesState[items._id]
+                             : items.likes.some((some: any) => some.userId == userId);
+                     
+                         if (alreadyLiked) {
+                           handleUnlike(items._id);
+                         } else {
+                           handleLike(items._id, items.text, items.adminId._id);
+                         }
+                       }}
+                     >
+                       <Heart
+                         className={`${
+                           (likesState[items._id] !== undefined
+                             ? likesState[items._id]
+                             : items.likes.some((some: any) => some.userId == userId))
+                             ? "fill-red-500 text-red-500 dark:text-red-400"
+                             : "text-gray-500 dark:text-gray-400"
+                         } dark:hover:text-red-400 h-5 w-5 mr-2 hover:text-red-500`}
+                       />
+                       <span className="text-xs">
+                         {items.likes.length + (likesState[items._id] ? 1 : 0)}
+                       </span>
+                     </Button>
                        {/* <span>32K</span> */}
                      </div>
-                     <div className="flex items-center">
-                        <Button
+                <div className="flex items-center">
+                <Button
     variant="ghost"
     size="sm"
     onClick={(e) => {
@@ -364,6 +356,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
   >
     <Share className="h-5 w-5 mr-1" />
   </Button>
+                      
                       
                      </div>
                    </div>
