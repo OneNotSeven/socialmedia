@@ -25,13 +25,14 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { createCommunity, getToken } from "@/controllers/controller";
 import CommunityList from "./CommunityList";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 const BuildCommunity = () => {
   const [value, setValue] = useState<string>("");
   const [bio, setbio] = useState<string>("")
   const [userId, setuserId] = useState<string>("")
   const [isChecked, setisChecked] = useState<boolean>(false)
+  const [loader, setloader] = useState<boolean>(false)
 
   useEffect(() => {
 
@@ -45,16 +46,24 @@ const BuildCommunity = () => {
    
         
   }, [])
-  console.log("actual user id",userId)
+ 
   const communitySaved = async () => {
-    const saving = await createCommunity(userId, { branchName: value, bio: bio, allowMessage: isChecked })
-    console.log("saved community res",saving)
+try {
+  setloader(true)
+  const saving = await createCommunity(userId, { branchName: value, bio: bio, allowMessage: isChecked })
+
+} catch (error) {
+  console.log("something went wrong",error)
+} finally {
+  setloader(false)
+}
+    
 }
   const handlechange = (value:boolean) => {
     setisChecked(value)
   }
 
-      console.log("ben10",isChecked)
+     
   return (
       <>
       <div className="flex  sm:items-center justify-around w-full sm:w-[70%] mt-8">
@@ -108,7 +117,7 @@ const BuildCommunity = () => {
       </Accordion>
       
                 <DialogFooter>
-                  <Button onClick={communitySaved}>Save</Button>
+              <Button onClick={communitySaved}>{loader ?<Loader2 className="text-white" />: "Save"}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
