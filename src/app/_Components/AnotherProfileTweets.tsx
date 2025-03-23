@@ -163,7 +163,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
     }
     
   }
-   console.log("content data ::",contentData)
+   
   return (
     <>
     {isCommentModalOpen && selectedContentId && (
