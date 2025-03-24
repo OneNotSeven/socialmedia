@@ -229,7 +229,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                   alt="Post image"
                   width={400}
                   height={200}
-                  className="w-full object-cover"
+                  className="w-full aspect-square object-contain"
                 />)}
                  {items.video && (
                     <div  onClick={(e) => { e.stopPropagation(), e.preventDefault() }} className="w-full rounded-lg overflow-hidden">
