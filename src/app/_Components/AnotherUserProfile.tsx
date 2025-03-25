@@ -1,7 +1,7 @@
 "use client"
-import { followUser, gettingCommmunity, getToken, getUserProfile, sendRequest, unFollowUser } from '@/controllers/controller'
+import { chatside, followUser, gettingCommmunity, getToken, getUserProfile, sendRequest, unFollowUser } from '@/controllers/controller'
 import React, { useEffect, useState } from 'react'
-import { ChevronDown, Loader,Loader2Icon,Settings, Verified } from "lucide-react"
+import { ChevronDown, Loader,Loader2Icon,Settings, UserPlus2, Verified } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -11,13 +11,17 @@ import AnotherProfileTweets from './AnotherProfileTweets'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from 'next/navigation'
+
 
 const AnotherUserProfile = ({ username }: any) => {
+  const router=useRouter()
   const [profile, setprofile] = useState<any>()
   const [loader, setloader] = useState<boolean>(false)
   const [userId, setuserId] = useState<string>()
   const [check, setcheck] = useState<boolean>(false)
-    const [delrender, setdelrender] = useState<boolean>(false)
+  const [delrender, setdelrender] = useState<boolean>(false)
+  const [messageLoader, setmessageLoader] = useState<boolean>(false)
 
      useEffect(() => {
     
@@ -26,7 +30,7 @@ const AnotherUserProfile = ({ username }: any) => {
             setuserId(userId)
             const userProfile = await getUserProfile(username)
             if (userProfile.success == true) {
-               
+                console.log(userProfile.data)
                 setprofile(userProfile.data)
             }
             
@@ -51,7 +55,7 @@ const AnotherUserProfile = ({ username }: any) => {
           setcheck(true)
           setloader(false)
         }
-        
+        console.log("unfollow api",unfollowapi)
       } catch (error) {
         console.log("error",error)
       } finally {
@@ -85,6 +89,24 @@ const AnotherUserProfile = ({ username }: any) => {
     }
   }
     
+  const handleMessageSave = async (chatId: string) => {
+    try {
+      setmessageLoader(true)
+        
+      const saveChatside = await chatside(userId, chatId)
+      if (saveChatside.success == true) {
+        setmessageLoader(false)
+        router.push(`/chats/${chatId}`)
+        
+      } else {
+        setmessageLoader(false)
+        
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
 
   return (
       <>
@@ -129,13 +151,14 @@ const AnotherUserProfile = ({ username }: any) => {
                     )
                   ) : (
                       <>
-                       <Link href="/profile/edit-profile"><Button className="bg-gray-500 sm:flex hidden ">Edit Profile</Button></Link> 
+                       <a href="/profile/edit-profile"><Button className="bg-gray-500 sm:flex hidden ">Edit Profile</Button></a> 
                         
                       </>
                       
                   )}
 
                   <DropDown userId={profile._id} authuser={userId} />
+                  <Button onClick={() => handleMessageSave(profile._id)} className='bg-slate-100 text-gray-800 hover:bg-slate-50'>{messageLoader ? <Loader className='animate-spin w-5 h-5' /> : "message"}</Button>
                   {profile._id === userId && profile.isVerified==false && (<Button variant="ghost" size="icon">
                     <a href='/get-verified'>
                     <Verified className="h-5 w-5" />
@@ -198,12 +221,13 @@ const AnotherUserProfile = ({ username }: any) => {
                     )
                   ) : (
                       <>
-                        <Link href="/profile/edit-profile"><Button className="bg-gray-500 sm:hidden flex ">Edit Profile</Button></Link> 
+                        <a href="/profile/edit-profile"><Button className="bg-gray-500 sm:hidden flex ">Edit Profile</Button></a> 
                         
                       </>
                       
-                  )}
-
+                )}
+                
+                <Button size="sm" onClick={() => handleMessageSave(profile._id)} className='bg-slate-100 text-gray-800 hover:bg-slate-50'>{messageLoader ? <Loader className='animate-spin w-5 h-5' /> : "message"}</Button>
                 <DropDown userId={profile._id} authuser={userId} />
                 {profile._id === userId && profile.isVerified==false && (<Button variant="ghost" size="icon">
                     <a href='/get-verified'>
@@ -282,10 +306,12 @@ const DropDown = ({ userId,authuser}:any) => {
     return (
         <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className='sm:text-[14px] text-[12px]' variant="outline">
-          Community
+        <Button className='sm:text-[14px] w-fit  text-[12px]' variant="outline">
+            <span className='sm:flex hidden'>Community</span>
+            <UserPlus2 className='sm:hidden'/>
           <ChevronDown className="h-5 w-5 ml-2" />
         </Button>
+        
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-96 max-h-96 h-56 overflow-auto">
