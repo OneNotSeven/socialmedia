@@ -347,3 +347,22 @@ export const LogOut = async() => {
   const usersres = await users.json()
   return usersres
 }
+
+export const chatside = async(myId:any,chatId:string) => {
+  const users = await fetch(`${appBaseUrl}/api/chatside`, {
+    method: "Post",
+    body:JSON.stringify({myId,chatId})
+  })
+  const usersres = await users.json()
+  return usersres
+}
+
+export const chatSideInfo = async (userId: string): Promise<any> => {
+  const getcontent = await fetch(`${appBaseUrl}/api/chatsidebar`, {
+    method: "Post",
+    body: JSON.stringify(userId)
+  })
+  const getContentRes = await getcontent.json()
+  return getContentRes
+  
+}
