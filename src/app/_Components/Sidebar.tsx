@@ -299,7 +299,7 @@ const Sidebar = ({ check }: any) => {
         <NotificationSlider onClose={() => { setIsSliderOpen(false); setCollapsed(false); }} userId={userId} />
       )}
 
-      <div className={`w-full sm:hidden h-16 flex items-center justify-center  fixed bottom-0 bg-white shadow-lg z-50 ${pathname==`/view-community/${params.id}` ? 'hidden' : 'flex'}`}>
+      <div className={`w-full sm:hidden h-16 flex items-center justify-center  fixed bottom-0 bg-white shadow-lg z-50 ${pathname==`/view-community/${params.id}` || pathname==`/chats/${params.id}` ? 'hidden' : 'flex'}`}>
         <div className="flex w-full">
           <div className="flex justify-evenly w-full items-center h-12 rounded-t-md gap-2">
             <Link href="/">
