@@ -1,6 +1,8 @@
 
 import type { Metadata } from "next";
 import "../globals.css"
+import DirectMessageSidebar from "../_Components/ChatSidebar";
+import Sidebar from "../_Components/Sidebar";
 // import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
@@ -19,8 +21,10 @@ export default function RootLayout({
       <body>
        
           
-        <div className="flex gap-12">
-
+      <div className="flex overflow-hidden">
+          <Sidebar check={true} />
+        
+          <DirectMessageSidebar/>
           {children}
         </div>
      
