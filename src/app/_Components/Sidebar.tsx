@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, Home, Search, User, Users, Verified, HelpCircle, SearchIcon, HomeIcon, MoreHorizontalIcon } from "lucide-react";
-import { ref, onValue, update } from "firebase/database";
+import { Bell, Home, Search, User, Users, Verified, HelpCircle, SearchIcon, HomeIcon, MoreHorizontalIcon, Send } from "lucide-react";
+import { ref, onValue, update, off } from "firebase/database";
 import { realDatabase } from "@/lib/firebase";
 import { BasicInfo, getToken, LogOut } from "@/controllers/controller";
 import NotificationSlider from "./NotificationSlider";
@@ -22,6 +22,8 @@ const Sidebar = ({ check }: any) => {
   const [userId, setUserId] = useState<string>("");
   const [isSliderOpen, setIsSliderOpen] = useState<boolean>(false);
   const [infoUser, setinfoUser] = useState<any[]>([])
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  
 
   useEffect(() => {
     setCollapsed(check);
@@ -42,6 +44,7 @@ const Sidebar = ({ check }: any) => {
       if (fetchedUserId) {
         setUserId(fetchedUserId);
         listenForNotifications(fetchedUserId);
+        listenForUnreadMessages(fetchedUserId);
       }
     };
     getUserId();
@@ -117,6 +120,39 @@ const Sidebar = ({ check }: any) => {
     }
   }
 
+  const listenForUnreadMessages = (authUserId: string) => {
+    const userChatsRef = ref(realDatabase, `directChats/${authUserId}`);
+  
+    const unsubscribe = onValue(userChatsRef, (snapshot) => {
+      const chatData = snapshot.val();
+      console.log("🔥 Fetched Chat Data:", chatData); // 🔍 Debug log
+  
+      if (!chatData) {
+        setUnreadMessages(0);
+        return;
+      }
+  
+      let totalUnread = 0;
+      Object.entries(chatData).forEach(([chatId, chat]: any) => {
+        console.log(`📨 Chat with ${chatId}:`, chat); // 🔍 Debug log
+  
+        const unreadCount = Object.values(chat).filter(
+          (msg: any) => msg?.read === false && msg.senderId !== authUserId
+        ).length;
+  
+       
+        totalUnread += unreadCount;
+      });
+  
+     
+      setUnreadMessages(totalUnread);
+    });
+  
+    return () => off(userChatsRef);
+  };
+
+ 
+
   return (
     <>
       <div className="sticky hidden h-screen top-0 sm:flex">
@@ -163,7 +199,24 @@ const Sidebar = ({ check }: any) => {
                   )}
                   {!collapsed && <span className="ms-3">Notifications</span>}
                 </p>
+                </li>
+                <Link href="/chats">
+                <li className="cursor-pointer" >
+                  
+                  <div className="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <Send />
+                      <div className="flex justify-between w-full">
+                        
+                    {!collapsed && <span className="ms-3">Direct Message</span>}
+                    {unreadMessages > 0 && (
+              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                {unreadMessages}
+              </span>
+            )}
+                      </div>
+                </div>
               </li>
+                </Link>
 
               <Link href={`/profiles/${infoUser[0]?.username}`}>
               
@@ -286,6 +339,22 @@ const Sidebar = ({ check }: any) => {
             </Link>
 </div>
         </div>
+      </div>
+      <div className={`sm:hidden absolute top-2 right-3 ${pathname==`/` ? 'flex' : 'hidden'}`}>
+      <Link href="/chats" className="cursor-pointer">
+                
+                  
+                  <div className="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <Send />
+                    
+                 
+                </div>
+                {unreadMessages > 0 && (
+              <span className="bg-red-500 absolute top-1 right-[-8px] text-white text-xs px-2 py-1 rounded-full">
+                {unreadMessages}
+              </span>
+            )}
+                </Link>
       </div>
     </>
   );
