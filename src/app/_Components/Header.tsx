@@ -4,8 +4,8 @@ import Link from "next/link"
 
 const Header = () => {
     return (
-        <header className=" z-50 sm:hidden flex w-full  bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className=" w-full justify-center flex  items-center">
+        <header className=" sm:hidden flex ">
+          <div className="  justify-center flex  items-center">
             {/* Left side - Logo and Name */}
             <div className="flex items-center gap-2">
               <Link href="/" className="flex items-center gap-2">
