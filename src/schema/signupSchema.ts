@@ -26,6 +26,7 @@ const signupModel = new mongoose.Schema({
         link: String,
     }],
     community: [{ type: Array }],
+    chatArray: [{ type: mongoose.Schema.Types.ObjectId, ref: "appuserdatas" }] ,
     isVerified:{type:Boolean,default:false}
 });
 
