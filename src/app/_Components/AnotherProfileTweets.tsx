@@ -228,16 +228,20 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                    </div>
                   
                    <p className="text-sm mb-3">
-         {items.text.split(" ").map((word:any, index:number) =>
-           word.startsWith("#") ? (
-             <span key={index} className="text-blue-500">
-               {word}{" "}
-             </span>
-           ) : (
-             <span key={index}>{word} </span>
-           )
-          )}
-        </p>
+  {items.text
+    .slice(0, items.text.length > 100 ? 200 : items.text.length)
+    .split(" ")
+    .map((word: string, index: number) =>
+      word.startsWith("#") ? (
+        <span key={index} className="text-blue-500">{word} </span>
+      ) : (
+        <span key={index}>{word} </span>
+      )
+    )}
+  {items.text.length > 100 && (
+    <span className="text-blue-500">...show more</span>
+  )}
+</p>
                    
                    <div className="rounded-lg overflow-hidden mb-3">
                 {items.image && (
