@@ -16,6 +16,7 @@ import { realDatabase } from "@/lib/firebase";
 import { appBaseUrl } from "@/schema/appurl";
 import TweetsSkeleton from "./TweetSkeleton";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 const Tweets = () => {
@@ -33,10 +34,12 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
   const [basicInfo, setBasicInfo] = useState({ name: "", ProfilePic: "", username: "" });
   const [loading, setloading] = useState<boolean>(false)
   const [infoUser, setinfoUser] = useState<any[]>([])
+  const [isVertical, setIsVertical] = useState(false);
 
   const videoRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const [aspectRatio, setAspectRatio] = useState("16/9"); // Default to landscape
 
-  
+  const router=useRouter()
 
   useEffect(() => {
     try {
@@ -74,6 +77,16 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
   useEffect(() => {
     contentData?.forEach((item, idx) => {
       if (item.video && videoRefs.current[idx]) {
+        const video = videoRefs.current[idx];
+        if (video) {
+          const video = videoRefs.current[idx];
+    if (video) {
+      video.onloadedmetadata = () => {
+        const { videoWidth, videoHeight }:any = video;
+        setIsVertical(videoHeight > videoWidth);
+      };
+    }
+        }
         videojs(videoRefs.current[idx] as HTMLDivElement, {
           controls: true,
           responsive: true,
@@ -160,7 +173,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
       }
     }
 
-  
+
   return (
     <>
       {isCommentModalOpen && selectedContentId && (
@@ -198,7 +211,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                 <AvatarImage src={items.adminId?.profilePic || "/profile.jpg"} />
                 <AvatarFallback>U</AvatarFallback>
               </Avatar>
-              <Link onClick={(e)=>{ e.stopPropagation();}} href={`/profiles/${items.adminId.username}`}>  <div>
+               <div onClick={(e)=>{ e.stopPropagation(); router.push(`/profiles/${items.adminId.username }`)}}>
                <div className="font-semibold text-sm flex gap-1 items-center">
                                             { items.adminId.name}
                       {items.adminId?.isVerified && <Verified className="fill-blue-500 text-white" />}
@@ -208,20 +221,26 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                 </div>
                                   <div className="text-xs text-muted-foreground">{items.adminId.username }</div>
                   </div>
-                  </Link>
+                  
             </div>
            
             <p className="text-sm mb-3">
-  {items.text.split(" ").map((word:any, index:number) =>
-    word.startsWith("#") ? (
-      <span key={index} className="text-blue-500">
-        {word}{" "}
-      </span>
-    ) : (
-      <span key={index}>{word} </span>
-    )
-   )}
- </p>
+  {items.text
+    .slice(0, items.text.length > 100 ? 200 : items.text.length)
+    .split(" ")
+    .map((word: string, index: number) =>
+      word.startsWith("#") ? (
+        <span key={index} className="text-blue-500">{word} </span>
+      ) : (
+        <span key={index}>{word} </span>
+      )
+    )}
+  {items.text.length > 100 && (
+    <span className="text-blue-500">...show more</span>
+  )}
+</p>
+
+
             
             <div className="rounded-lg overflow-hidden mb-3">
                 {items.image && (<Image
@@ -234,19 +253,27 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                  {items.video && (
                     <div  onClick={(e) => { e.stopPropagation(), e.preventDefault() }} className="w-full rounded-lg overflow-hidden">
                       <video
-                        ref={(el: any) => {
-                          if (el) videoRefs.current[idx] = el;
-                        }}
-                        className="video-js vjs-theme-default w-full h-auto rounded-lg"
-                          controls
-                          preload="metadata"
-                          autoPlay
-                          muted
-                          playsInline
-                          onClick={(e) => { e.stopPropagation(), e.preventDefault() }}
-                      >
-                        <source src={items.video} type="video/mp4" />
-                      </video>
+      ref={(el:any) => {
+        if (el) videoRefs.current[idx] = el;
+      }}
+      className="video-js vjs-theme-default w-full rounded-lg"
+      style={{
+        aspectRatio: isVertical ? "9/16" : "16/9",
+        maxHeight: isVertical ? "500px" : "auto", // Limit height for reels
+        objectFit: "cover", // Ensures proper fit
+      }}
+      controls
+      preload="metadata"
+      autoPlay
+      muted
+      playsInline
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+    >
+      <source src={items.video} type="video/mp4" />
+    </video>
                     </div>
                   )}
             </div>
