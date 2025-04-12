@@ -2,8 +2,8 @@ import "../globals.css"
 import type { Metadata } from "next";
 
 export const metadata:Metadata = {
-  title: 'Quest Castle',
-  description: 'Authorization page of Quest Castle',
+  title: 'Twins',
+  description: 'Authorization page of Twins',
 }
 
 export default function RootLayout({ children }:Readonly<{
