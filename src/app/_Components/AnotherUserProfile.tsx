@@ -111,7 +111,7 @@ const AnotherUserProfile = ({ username }: any) => {
   return (
       <>
           
-      {profile ? < div className="max-w-2xl sm:w-fit w-full mx-auto p-2" >
+      {profile ? < div className="max-w-2xl sm:w-fit w-[650px] border-l-2 border-r-2 mx-auto p-2" >
         <div className="space-y-8 w-full">
           {/* Profile Header */}
           <div className="flex items-center justify-between sm:gap-8 gap-3">
@@ -137,7 +137,7 @@ const AnotherUserProfile = ({ username }: any) => {
                 
                   {profile.isVerified && <Verified className="fill-blue-500 text-white ml-1" />}
                 </div>
-                <div className="sm:flex hidden items-center gap-2">
+                {/* <div className=" hidden items-center gap-2">
                   {userId !== profile._id ? (
                     profile?.followers.flat().some((items: any) => items._id === userId) ? (
                       <Button  onClick={() => handleUnfollow(profile._id, userId)} className="bg-gray-100 hover:bg-gray-100 text-gray-800">
@@ -164,7 +164,7 @@ const AnotherUserProfile = ({ username }: any) => {
                     <Verified className="h-5 w-5" />
                     </a>
                   </Button>)}
-                </div>
+                </div> */}
               </div>
 
               {/* Stats */}
@@ -206,8 +206,8 @@ const AnotherUserProfile = ({ username }: any) => {
                   ))}
                 </div>
               </div>
-              {/* for small device */}
-          <div className="flex sm:hidden mt-2 items-center gap-2">
+              {/* for small & big device */}
+          <div className="flex  mt-2 items-center gap-2">
                   {userId !== profile._id ? (
                     profile?.followers.flat().some((items: any) => items._id === userId) ? (
                       <Button size="sm"  onClick={() => handleUnfollow(profile._id, userId)} className="bg-gray-100 hover:bg-gray-100 text-gray-800">
@@ -221,7 +221,7 @@ const AnotherUserProfile = ({ username }: any) => {
                     )
                   ) : (
                       <>
-                        <a href="/profile/edit-profile"><Button className="bg-gray-500 sm:hidden flex ">Edit Profile</Button></a> 
+                        <a href="/profile/edit-profile"><Button className="bg-white border-[1px] text-gray-800 shadow-none flex ">Edit Profile</Button></a> 
                         
                       </>
                       
@@ -306,7 +306,7 @@ const DropDown = ({ userId,authuser}:any) => {
     return (
         <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className='sm:text-[14px] w-fit  text-[12px]' variant="outline">
+        <Button className='sm:text-[14px]  text-[12px]' variant="outline">
             <span className='sm:flex hidden'>Community</span>
             <UserPlus2 className='sm:hidden'/>
           <ChevronDown className="h-5 w-5 ml-2" />
