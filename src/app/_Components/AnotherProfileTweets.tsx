@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Heart, HeartIcon, MessageCircle, MoreVertical, Share, Verified } from "lucide-react";
+import { BarChart2, Bookmark, Heart, HeartIcon, MessageCircle, MoreVertical, Share, Verified } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
@@ -25,6 +25,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
       const [comments, setComments] = useState<number>();
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [newrender, setnewrender] = useState<boolean>(false)
+  const [bookMark, setbookMark] = useState<{ [key: string]: boolean }>({})
 
   const [loader, setloader] = useState<boolean>(false)
       const [selectedContentId, setSelectedContentId] = useState<string | null>(null);
@@ -75,7 +76,12 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
       [contentId]: newCount, // Correctly update the count for the specific post
     }));
   };
-
+  const handleBookmark = (postId:string) => {
+    setbookMark((prev) => ({
+      ...prev,
+      [postId]:!prev[postId]
+  }))
+}
    const handleLike = (postId: string,text:string,adminid:string) => {
       // Optimistic UI: Toggle like state instantly
       setLikesState((prev) => ({
@@ -163,9 +169,13 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
     }
     
   }
-   
+   console.log("content data ::",contentData)
   return (
     <>
+      <div>
+
+      <div>
+
     {isCommentModalOpen && selectedContentId && (
         <CommentModal
           
@@ -179,8 +189,8 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
           updateCommentCount={updateCommentCount}
       />
     )}
-      <div className='text-2xl font-semibold pb-3  text-gray-600'>All post</div>
-      <div className="flex flex-col gap-2 w-full">
+      {/* <div className='text-2xl font-semibold pb-3  text-gray-600'>All post</div> */}
+      <ul className="flex flex-col divide-y w-full">
 
       {contentData.map((items: any, idx: number) => (
        
@@ -194,7 +204,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                        Suggested Post
                      </p>
                    )}
-                 <Card key={idx} className="hover:shadow-md w-full transition-shadow">
+                 <div key={idx} className="hover:shadow-md w-full transition-shadow">
                  <CardContent className="p-4">
                    <div className="flex items-center mb-3">
                      <Avatar className="h-8 w-8 mr-2">
@@ -206,9 +216,9 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                     <div className="flex gap-1">
 
                                                    { items.adminId.name}
-                             {items.adminId.isVerified && <Verified className="fill-blue-500 w-5 h-5 text-white" />}
-                             <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">.
-                          {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
+                      {items.adminId.isVerified && <Verified className="fill-blue-500 w-5 h-5 text-white" />}
+                             <span className="sm:text-sm  capitalize font-normal text-[8px] text-gray-500 dark:text-gray-400">
+                        {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
                         </span>
                     </div>
                   <div>
@@ -228,20 +238,16 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                    </div>
                   
                    <p className="text-sm mb-3">
-  {items.text
-    .slice(0, items.text.length > 100 ? 200 : items.text.length)
-    .split(" ")
-    .map((word: string, index: number) =>
-      word.startsWith("#") ? (
-        <span key={index} className="text-blue-500">{word} </span>
-      ) : (
-        <span key={index}>{word} </span>
-      )
-    )}
-  {items.text.length > 100 && (
-    <span className="text-blue-500">...show more</span>
-  )}
-</p>
+         {items.text.split(" ").map((word:any, index:number) =>
+           word.startsWith("#") ? (
+             <span key={index} className="text-blue-500">
+               {word}{" "}
+             </span>
+           ) : (
+             <span key={index}>{word} </span>
+           )
+          )}
+        </p>
                    
                    <div className="rounded-lg overflow-hidden mb-3">
                 {items.image && (
@@ -252,7 +258,7 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                          alt="Post image"
                          width={400}
                          height={200}
-                         className="w-full  aspect-square object-contain"
+                         className="w-full  flex object-cover"
                        />
                                         
                  
@@ -332,7 +338,19 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
                        </span>
                      </Button>
                        {/* <span>32K</span> */}
-                     </div>
+                </div>
+                <div className="flex items-center">
+                  <Button onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleBookmark(items._id)
+                  }} className={`bg-white text-gray-500 hover:text-blue-500  shadow-none hover:bg-white`}><Bookmark className={`${bookMark[items._id]?"fill-blue-500 text-blue-500":null}`} /></Button>
+
+                </div>
+                <div className="flex items-center">
+                  <Button className="bg-white text-[10px] font-normal text-gray-500 hover:text-blue-500 shadow-none hover:bg-white"><BarChart2 className="h-5 w-5"/>202k</Button>
+
+                </div>
                 <div className="flex items-center">
                 <Button
     variant="ghost"
@@ -362,13 +380,16 @@ const AnotherProfileTweets = ({ data, userid,setdelrender }: { data:any,userid:a
   </Button>
                       
                       
-                     </div>
+                </div>
+               
                    </div>
                  </CardContent>
-               </Card>
+               </div>
                  </Link>
       
     ))}
+      </ul>
+      </div>
       </div>
   </>
   )
