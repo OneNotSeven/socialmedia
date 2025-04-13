@@ -132,16 +132,16 @@ const AnotherUserProfile = ({ username }: any) => {
 
             <div className="sm:flex-1 flex-col overflow-hidden sm:space-y-4 space-y-1">
               <div className="flex gap-4 items-center sm:justify-between">
-                <div className='flex justify-between w-full items-center'>
+                <div className='flex  w-full items-center'>
                   <h2 className="sm:text-xl text-xs font-semibold">{profile?.username}</h2>
                 
                   {profile.isVerified && <Verified className="fill-blue-500 text-white ml-1" />}
-                  {profile._id === userId && profile.isVerified==false && (<Button className='w-fit pl-2 pr-2 '  variant="ghost" size="icon">
+                  {profile._id === userId && profile.isVerified==false && (<Badge className='w-fit bg-slate-100 text-gray-600 rounded-full ml-3  pl-2 pr-2 '   >
                     <a className='flex gap-1 items-center' href='/get-verified'>
-                      <Verified className="h-5 w-5" />
+                      <Verified className="h-4 fill-blue-500 text-white w-4" />
                       get verified
                     </a>
-                  </Button>)}
+                  </Badge>)}
                 </div>
                 {/* <div className=" hidden items-center gap-2">
                   {userId !== profile._id ? (
