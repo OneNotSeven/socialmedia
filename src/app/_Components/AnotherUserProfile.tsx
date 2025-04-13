@@ -111,7 +111,7 @@ const AnotherUserProfile = ({ username }: any) => {
   return (
       <>
           
-      {profile ? < div className="max-w-2xl sm:w-fit w-[650px] border-l-2 border-r-2 mx-auto p-2" >
+      {profile ? < div className="max-w-2xl w-full sm:w-[650px] border-l-2 border-r-2 mx-auto p-2" >
         <div className="space-y-8 w-full">
           {/* Profile Header */}
           <div className="flex items-center justify-between sm:gap-8 gap-3">
@@ -130,12 +130,18 @@ const AnotherUserProfile = ({ username }: any) => {
             
             </div>
 
-            <div className="sm:flex-1 flex-col sm:space-y-4 space-y-1">
+            <div className="sm:flex-1 flex-col overflow-hidden sm:space-y-4 space-y-1">
               <div className="flex gap-4 items-center sm:justify-between">
-                <div className='flex items-center'>
+                <div className='flex justify-between w-full items-center'>
                   <h2 className="sm:text-xl text-xs font-semibold">{profile?.username}</h2>
                 
                   {profile.isVerified && <Verified className="fill-blue-500 text-white ml-1" />}
+                  {profile._id === userId && profile.isVerified==false && (<Button className='w-fit pl-2 pr-2 '  variant="ghost" size="icon">
+                    <a className='flex gap-1 items-center' href='/get-verified'>
+                      <Verified className="h-5 w-5" />
+                      get verified
+                    </a>
+                  </Button>)}
                 </div>
                 {/* <div className=" hidden items-center gap-2">
                   {userId !== profile._id ? (
@@ -221,7 +227,7 @@ const AnotherUserProfile = ({ username }: any) => {
                     )
                   ) : (
                       <>
-                        <a href="/profile/edit-profile"><Button className="bg-white border-[1px] text-gray-800 shadow-none flex ">Edit Profile</Button></a> 
+                        <a href="/profile/edit-profile"><Button size="sm" className="bg-white border-[1px] text-gray-800 shadow-none flex ">Edit Profile</Button></a> 
                         
                       </>
                       
@@ -229,11 +235,7 @@ const AnotherUserProfile = ({ username }: any) => {
                 
                 <Button size="sm" onClick={() => handleMessageSave(profile._id)} className='bg-slate-100 text-gray-800 hover:bg-slate-50'>{messageLoader ? <Loader className='animate-spin w-5 h-5' /> : "message"}</Button>
                 <DropDown userId={profile._id} authuser={userId} />
-                {profile._id === userId && profile.isVerified==false && (<Button variant="ghost" size="icon">
-                    <a href='/get-verified'>
-                    <Verified className="h-5 w-5" />
-                    </a>
-                  </Button>)}
+               
                  
                 </div>
             </div>
@@ -309,7 +311,7 @@ const DropDown = ({ userId,authuser}:any) => {
         <Button className='sm:text-[14px]  text-[12px]' variant="outline">
             <span className='sm:flex hidden'>Community</span>
             <UserPlus2 className='sm:hidden'/>
-          <ChevronDown className="h-5 w-5 ml-2" />
+          <ChevronDown className="h-5 w-5 ml-0 sm:ml-2" />
         </Button>
         
       </DropdownMenuTrigger>
