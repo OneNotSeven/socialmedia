@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Heart, MessageCircle, Share, VerifiedIcon,Verified } from "lucide-react";
+import { Heart, MessageCircle, Share, VerifiedIcon,Verified, Repeat, BarChart2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card"
@@ -35,6 +35,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
   const [loading, setloading] = useState<boolean>(false)
   const [infoUser, setinfoUser] = useState<any[]>([])
   const [isVertical, setIsVertical] = useState(false);
+   const [bookMark, setbookMark] = useState<{ [key: string]: boolean }>({})
 
   const videoRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const [aspectRatio, setAspectRatio] = useState("16/9"); // Default to landscape
@@ -96,7 +97,12 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
     });
   }, [contentData]);
 
-  
+  const handleBookmark = (postId:string) => {
+    setbookMark((prev) => ({
+      ...prev,
+      [postId]:!prev[postId]
+  }))
+}
 
   const handleLike = (postId: string,text:string,adminid:string) => {
     // Optimistic UI: Toggle like state instantly
@@ -204,7 +210,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                 Suggested Post
               </p>
             )}
-          <Card key={idx} className="hover:shadow-md w-full transition-shadow">
+          <ul key={idx} className="hover:shadow-md divide-y w-full transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center mb-3">
               <Avatar className="h-8 w-8 mr-2">
@@ -215,7 +221,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
                <div className="font-semibold text-sm flex gap-1 items-center">
                                             { items.adminId.name}
                       {items.adminId?.isVerified && <Verified className="fill-blue-500 text-white" />}
-                      <span className="sm:text-sm text-[10px] text-gray-500 dark:text-gray-400">.
+                      <span className="sm:text-sm text-[10px] font-semibold text-gray-500 dark:text-gray-400">
                    {formatDistanceToNow(new Date(items.createdAt), { addSuffix: true })}
                  </span>
                 </div>
@@ -334,12 +340,24 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
   />
   <span className="text-xs">
     {items.likes.length + (likesState[items._id] ? 1 : 0)}
-  </span>
+                      </span>
+                      
 </Button>
 
+                
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <Button onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleBookmark(items._id)
+                  }} className={`bg-transparent hover:bg-transparent text-gray-500 hover:text-blue-500  shadow-none `}><Repeat className={`${bookMark[items._id]?"fill-blue-500 text-blue-500":null}`} /></Button>
+</div>
+<div className="flex items-center">
+                  <Button className="bg-transparent text-[10px] font-normal text-gray-500 hover:text-blue-500 shadow-none hover:bg-transparent"><BarChart2 className="h-5 w-5"/>202k</Button>
 
-                {/* <span>32K</span> */}
-              </div>
+                </div>
               <div className="flex items-center">
                  <Button
                     variant="ghost"
@@ -371,7 +389,7 @@ const [likesSupporter, setlikesSupporter] = useState<boolean>(false)
               </div>
             </div>
           </CardContent>
-        </Card>
+        </ul>
           </Link>
         ))}
         </div> 
