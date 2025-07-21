@@ -22,7 +22,7 @@ export async function POST(req: Request): Promise<NextResponse> {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getFullYear() - 2);
+        tomorrow.setDate(tomorrow.getDate() - 2);
 
         // Fetch today's posts from users they are following
         const contents = await content
