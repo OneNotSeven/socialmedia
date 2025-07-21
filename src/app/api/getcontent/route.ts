@@ -14,7 +14,7 @@ export async function POST(req: Request): Promise<NextResponse> {
 
         // Get past 3 days' date range
         const pastThreeDays = new Date();
-        pastThreeDays.setDate(pastThreeDays.getDate() - 3);
+        pastThreeDays.setDate(pastThreeDays.getFullYear() - 2);
         pastThreeDays.setHours(0, 0, 0, 0);
 
         let contents: any = [];
