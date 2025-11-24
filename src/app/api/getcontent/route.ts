@@ -38,7 +38,7 @@ export async function POST(req: Request): Promise<NextResponse> {
             const suggestedContents = await content
                 .find({ 
                     adminId: { $ne: userId }, // Exclude self
-                    createdAt: { $gte: pastThreeDays } // Get posts from last 3 days
+                   
                 }) 
                 .populate("adminId", "_id name email username profilePic isVerified")
                 .sort({ createdAt: -1 }) // Get latest posts first
