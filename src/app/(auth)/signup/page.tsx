@@ -6,7 +6,7 @@ import { formSignUpSchema } from "@/schema/yupschema";
 
 import { useFormik } from "formik";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,7 +15,7 @@ const Page = () => {
 
   const [presentEmailError, setpresentEmailError] = useState<boolean>(false);
   const [loader, setloader] = useState<boolean>(false)
-  // const redirection=useRouter()
+  const redirection=useRouter()
 
   const saveData = async () => {
     try {
@@ -55,6 +55,7 @@ const Page = () => {
               fontFamily: 'Arial, sans-serif'  // Set your desired font
             }
           });
+          redirection.push("/")
          
         }
       } 
