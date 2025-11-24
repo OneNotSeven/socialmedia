@@ -28,7 +28,7 @@ export async function POST(req: Request): Promise<NextResponse> {
         const contents = await content
             .find({ 
                 adminId: { $in: followingIds },
-                createdAt: { $gte: today, $lt: tomorrow } // Filter only today's posts
+               
             })
             .populate("adminId", "_id name email username profilePic")
             .exec();
