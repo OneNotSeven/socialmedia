@@ -25,9 +25,9 @@ export async function POST(req: Request):Promise<NextResponse> {
             const pushed2 = await EcomSchema.updateOne({ _id: chatId }, { $push: { chatArray: myId } })
             
            
-            return NextResponse.json({ message: "Chat added successfully",sucess:true }, { status: 200 });
+            return NextResponse.json({ message: "Chat added successfully",success:true }, { status: 200 });
         }
-        return NextResponse.json({ message: "Chat not added successfully",sucess:false }, { status: 500 });
+        return NextResponse.json({ message: "Chat not added successfully",success:false }, { status: 500 });
 
 
     } catch (error) {
